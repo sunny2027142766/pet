@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zcy.pet.mapper.PetTestMapper">
+
+    <resultMap id="BaseResultMap" type="com.zcy.pet.model.entity.PetTest">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="age" column="age" jdbcType="INTEGER"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name,age,
+        create_time,update_time
+    </sql>
+
+    <select id="getAllPetTestList" resultType="com.zcy.pet.model.entity.PetTest">
+        select * from pet_test
+    </select>
+
+    <select id="getPagePetTestList" resultType="com.zcy.pet.model.bo.PetTestBo">
+        SELECT
+            id,
+            name,
+            age,
+            create_time,
+            update_time
+        FROM pet_test
+        <where>
+            <if test="queryParams.name != null and queryParams.name != ''">
+                name like concat('%',#{queryParams.name},'%')
+            </if>
+            <if test="queryParams.age != null and queryParams.age != ''">
+                and age > #{queryParams.age}
+            </if>
+            <if test="queryParams.createTime != null and queryParams.createTime != ''">
+                and create_time = #{queryParams.createTime}
+            </if>
+            <if test="queryParams.updateTime != null and queryParams.updateTime != ''">
+                and update_time = #{queryParams.updateTime}
+            </if>
+        </where>
+    </select>
+</mapper>
