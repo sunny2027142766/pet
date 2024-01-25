@@ -3,7 +3,6 @@ package com.zcy.pet.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.zcy.pet.common.result.PageResult;
 import com.zcy.pet.common.result.Result;
-import com.zcy.pet.model.entity.PetTest;
 import com.zcy.pet.model.query.PetTestPageQuery;
 import com.zcy.pet.model.vo.PetTestPageVo;
 import com.zcy.pet.model.vo.PetTestVo;

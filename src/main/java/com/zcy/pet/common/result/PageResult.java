@@ -20,7 +20,7 @@ public class PageResult<T> implements Serializable {
 
     public static <T> PageResult<T> success(IPage<T> page) {
         PageResult<T> result = new PageResult<>();
-        Data<T> data = new Data<T>();
+        Data<T> data = new Data<>();
         data.setList(page.getRecords());
         data.setTotal(page.getTotal());
         // 设置result的值
