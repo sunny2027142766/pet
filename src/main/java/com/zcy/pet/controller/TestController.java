@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.zcy.pet.common.result.PageResult;
 import com.zcy.pet.common.result.Result;
 import com.zcy.pet.model.query.PetTestPageQuery;
+import com.zcy.pet.model.vo.FrontVo;
 import com.zcy.pet.model.vo.PetTestPageVo;
 import com.zcy.pet.model.vo.PetTestVo;
 import com.zcy.pet.service.PetTestService;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @Tag(name = "测试模块", description = "测试模块接口")
@@ -22,6 +24,14 @@ import java.util.List;
 public class TestController {
 
     private final PetTestService petTestService;
+
+    @Operation(description = "与前端联调接口")
+    @GetMapping("/front")
+    public Result<FrontVo> Front(){
+        FrontVo frontVo = new FrontVo();
+        frontVo.setName("张三");
+        return Result.success(frontVo);
+    }
 
     @Operation(description = "测试hello接口")
     @GetMapping("/hello")
