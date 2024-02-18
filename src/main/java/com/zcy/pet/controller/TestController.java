@@ -3,6 +3,7 @@ package com.zcy.pet.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.zcy.pet.common.result.PageResult;
 import com.zcy.pet.common.result.Result;
+import com.zcy.pet.model.form.TestForm;
 import com.zcy.pet.model.query.PetTestPageQuery;
 import com.zcy.pet.model.vo.FrontVo;
 import com.zcy.pet.model.vo.PetTestPageVo;
@@ -41,7 +42,7 @@ public class TestController {
 
     @Operation(description = "测试查询所有接口")
     @GetMapping
-    public Result<List<PetTestVo>> getList(){
+    public Result<List<PetTestVo>> getTest(){
         //  调用service查询所有结果
         List<PetTestVo> list = petTestService.getAllPetTestList();
         // 封装结果
@@ -55,5 +56,25 @@ public class TestController {
         IPage<PetTestPageVo> petTestPageList = petTestService.getPetTestPageList(petTestPageQuery);
         // 封装分页结果
         return PageResult.success(petTestPageList);
+    }
+    @Operation(description = "添加测试")
+    @PostMapping
+    public Result<String> addTest(@RequestBody TestForm testForm){
+        boolean saveTest = petTestService.saveTest(testForm);
+        return Result.judge(saveTest);
+    }
+
+    @Operation(description = "更新测试")
+    @PutMapping("/{id}")
+    public Result<String> updateTest(@PathVariable("id") Long id, @RequestBody TestForm testForm){
+        boolean saveTest = petTestService.updateTest(id,testForm);
+        return Result.judge(saveTest);
+    }
+
+    @Operation(description = "删除测试")
+    @DeleteMapping("/{ids}")
+    public  Result<String> deleteTest(@PathVariable("ids") String ids){
+        boolean result = petTestService.deleteTest(ids);
+        return Result.judge(result);
     }
 }

@@ -8,8 +8,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public enum ResultCode implements IResultCode, Serializable {
-    SUCCESS(200, "请求成功")
-    ;
+    SUCCESS(200, "请求成功"),
+    SYSTEM_EXECUTION_ERROR(500, "系统执行出错");
 
 
     private int code;
