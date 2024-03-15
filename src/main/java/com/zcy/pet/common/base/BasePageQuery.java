@@ -11,5 +11,5 @@ public class BasePageQuery {
     private Integer pageNum = 1;
 
     @Schema(description = "每页记录数", example = "10")
-    private Integer pageSize;
+    private Integer pageSize = 10;
 }

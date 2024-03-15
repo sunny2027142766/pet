@@ -19,7 +19,7 @@ import java.util.List;
 
 @Tag(name = "测试模块", description = "测试模块接口")
 @RestController
-@RequestMapping("/test")
+@RequestMapping("/api/test")
 @RequiredArgsConstructor
 public class TestController {
 
