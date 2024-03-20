@@ -10,6 +10,13 @@ spring:
     username: root
     #数据库密码
     password: root
+  # redis配置
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      connect-timeout: 10s
+      password: 123456
 # Mybatis-plus配置
 mybatis-plus:
   mapper-locations: classpath:mapper/*.xml
@@ -20,6 +27,7 @@ mybatis-plus:
 logging:
   level:
     com.hexadecimal: debug
+
 # springdoc-openapi项目配置
 springdoc:
   swagger-ui:
@@ -32,8 +40,20 @@ springdoc:
     - group: 'default'
       paths-to-match: '/**'
       packages-to-scan: com.zcy.pet.controller
+
 # knife4j的增强配置，不需要增强可以不配
 knife4j:
   enable: true
   setting:
     language: zh_cn
+
+# JWT 配置
+jwt:
+  # 加密密钥
+  secret: pet
+  # header 名称
+  header: Authorization
+  # token有效时长 S
+  expire:
+    accessToken: 3600
+    refreshToken: 4000
