@@ -6,11 +6,13 @@ import com.zcy.pet.model.vo.UserTokenInfo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.util.Date;
 
 @Component
@@ -89,7 +91,6 @@ public class JwtTokenUtil {
         Date nowDate = new Date();
         Date accessTokenExpireDate = new Date(nowDate.getTime() + accessTokenExpire * 1000);
         Date refreshTokenExpireDate = new Date(nowDate.getTime() + refreshTokenExpire * 1000);
-
         UserToken userToken = new UserToken();
         BeanUtils.copyProperties(userTokenInfo, userToken);
         userToken.setAccessToken(createToken(userTokenInfo, nowDate, accessTokenExpireDate));
@@ -102,9 +103,6 @@ public class JwtTokenUtil {
 
     /**
      * 生成token
-     *
-     * @param userTokenInfo
-     * @return
      */
     public String createToken(UserTokenInfo userTokenInfo, Date nowDate, Date expireDate) {
         return Jwts.builder()
@@ -112,7 +110,7 @@ public class JwtTokenUtil {
                 .setSubject(JSONObject.toJSONString(userTokenInfo))
                 .setIssuedAt(nowDate)
                 .setExpiration(expireDate)
-                .signWith(SignatureAlgorithm.HS512, secret)
+                .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
     }
 
@@ -123,11 +121,12 @@ public class JwtTokenUtil {
      * @return
      */
     public Claims getTokenClaim(String token) {
-        try {
-            return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
-        } catch (Exception e) {
-            return null;
-        }
+        return Jwts
+                .parserBuilder()
+                .setSigningKey(secret)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     /**
@@ -170,31 +169,6 @@ public class JwtTokenUtil {
      */
     public UserTokenInfo getUserInfoToken(String token) {
         String subject = getTokenClaim(token).getSubject();
-        UserTokenInfo userTokenInfo = JSONObject.parseObject(subject, UserTokenInfo.class);
-        return userTokenInfo;
+        return JSONObject.parseObject(subject, UserTokenInfo.class);
     }
-
-    /**
-     * 获取用户名
-     *
-     * @param token
-     * @return
-     */
-    public String getUserName(String token) {
-        UserTokenInfo userInfoToken = getUserInfoToken(token);
-        return userInfoToken.getUserName();
-    }
-
-    /**
-     * 获取用户Id
-     *
-     * @param token
-     * @return
-     */
-    public Long getUserId(String token) {
-
-        UserTokenInfo userInfoToken = getUserInfoToken(token);
-        return userInfoToken.getUserId();
-    }
-
 }

@@ -16,7 +16,26 @@ spring:
       host: 127.0.0.1
       port: 6379
       connect-timeout: 10s
-      password: 123456
+  mail:
+    # 发送者邮箱
+    username: 2027142766@qq.com
+    #申请到的授权码
+    password: dzafcpdwyfcibbjb
+    # 配置 SMTP 服务器地址
+    host: smtp.qq.com
+    # 端口号465或587
+    port: 465
+    protocol: smtps
+    # 默认的邮件编码为UTF-8
+    default-encoding: UTF-8
+    # 配置SSL 加密工厂
+    properties:
+      mail:
+        smtp:
+          socketFactoryClass: javax.net.ssl.SSLSocketFactory
+          #表示开启 DEBUG 模式，这样，邮件发送过程的日志会在控制台打印出来，方便排查错误
+          debug: true
+          ssl: true`
 # Mybatis-plus配置
 mybatis-plus:
   mapper-locations: classpath:mapper/*.xml
@@ -50,10 +69,16 @@ knife4j:
 # JWT 配置
 jwt:
   # 加密密钥
-  secret: pet
+  secret: qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM
   # header 名称
   header: Authorization
   # token有效时长 S
   expire:
-    accessToken: 3600
-    refreshToken: 4000
+    accessToken: 60
+    refreshToken: 300
+
+# 邮箱 配置
+email:
+  from: 2027142766@qq.com
+  time: 60
+  subject: 虚拟宠物互动平台邮箱验证码

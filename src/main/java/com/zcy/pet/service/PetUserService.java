@@ -11,4 +11,6 @@ public interface PetUserService extends IService<PetUser> {
      * 获取所有用户信息
      */
     List<PetUserVo> getAllPetUser();
+
+    PetUser getUserByEmail(String email);
 }
