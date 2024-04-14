@@ -42,9 +42,9 @@ public class AuthController {
         if (!code.equals("null")) {
             return Result.success(code, "验证码已发送,请从邮箱查收");
         }
-        boolean b = sendCode.sendCode(email);
-        if (b) {
-            return Result.success(null, "发送成功");
+        String sendedCode = sendCode.sendCode(email);
+        if (sendedCode != null) {
+            return Result.success(sendedCode, "发送成功");
         }
         return Result.failed("邮箱不正确或为空");
     }

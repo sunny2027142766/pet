@@ -24,7 +24,7 @@ public class SendCode {
     @Value("${email.subject}")
     public String subject;
 
-    public Boolean sendCode(String email) throws MessagingException {
+    public String sendCode(String email) throws MessagingException {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         //生成随机验证码
         String code = CodeUtil.generateCode(6);
@@ -41,6 +41,6 @@ public class SendCode {
         redisUtil.set(email, code, Long.valueOf(time));
         // 发送邮件
         mailSender.send(mimeMessage);
-        return true;
+        return code;
     }
 }
