@@ -8,9 +8,8 @@ import java.util.List;
 
 @Data
 public class PageResult<T> implements Serializable {
-    private int code;
     private Data<T> data;
-    private String msg;
+    private Boolean success;
 
     @lombok.Data
     public static class Data<T> {
@@ -24,9 +23,7 @@ public class PageResult<T> implements Serializable {
         data.setList(page.getRecords());
         data.setTotal(page.getTotal());
         // 设置result的值
-        result.setCode(ResultCode.SUCCESS.getCode());
         result.setData(data);
-        result.setMsg(ResultCode.SUCCESS.getMsg());
         return result;
     }
 }

@@ -9,4 +9,5 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface PetUserConverter {
     List<PetUserVo> entityToVo(List<PetUser> petUsers);
+    PetUserVo entityToVo(PetUser petUsers);
 }

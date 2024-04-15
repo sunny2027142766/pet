@@ -5,11 +5,11 @@ spring:
     #数据库驱动完整类名
     driver-class-name: com.mysql.cj.jdbc.Driver
     #数据库连接url
-    url: jdbc:mysql://127.0.0.1:3307/virtual_pet_platform
+    url: jdbc:mysql://123.60.65.156:3306/virtual_pet_platform
     #数据库用户名
-    username: root
+    username: virtual_pet_platform
     #数据库密码
-    password: root
+    password: BLE3jPYFFbmALPcG
   # redis配置
   data:
     redis:

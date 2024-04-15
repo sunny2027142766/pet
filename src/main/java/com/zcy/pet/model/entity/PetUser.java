@@ -2,6 +2,7 @@ package com.zcy.pet.model.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.zcy.pet.common.base.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,5 +17,6 @@ public class PetUser extends BaseEntity {
     private String nickName;
     private String email;
     private String phone;
+    @TableLogic(delval = "0", value = "1")
     private Integer isValid;
 }
