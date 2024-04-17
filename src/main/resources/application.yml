@@ -74,8 +74,8 @@ jwt:
   header: Authorization
   # token有效时长 S
   expire:
-    accessToken: 60
-    refreshToken: 300
+    accessToken: 600
+    refreshToken: 1800
 
 # 邮箱 配置
 email:
