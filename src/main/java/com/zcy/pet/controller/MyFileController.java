@@ -14,11 +14,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * @author zf
- * @date 2024/4/17 23:09:45
- * @description MyFileController
- */
 @RestController
 @RequestMapping("/file")
 public class MyFileController {

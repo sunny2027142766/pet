@@ -63,16 +63,17 @@ public class AuthServiceImpl implements AuthService {
                 .expires(Long.valueOf(accessTokenExpire))
                 .build();
         log.info("登录成功信息{}", loginResult);
-        return Result.success(loginResult);
+        return Result.success(loginResult,"登录成功");
     }
 
     @Override
     public String register(UserRegisterForm userRegisterForm) {
+        String username = userRegisterForm.getUsername();
         String email = userRegisterForm.getEmail();
         String password = userRegisterForm.getPassword();
         String code = userRegisterForm.getCode();
         // 判断是否为空
-        if (!StringUtils.hasLength(email) || !StringUtils.hasLength(password) || !StringUtils.hasLength(code)) {
+        if (!StringUtils.hasLength(username) || !StringUtils.hasLength(email) || !StringUtils.hasLength(password) || !StringUtils.hasLength(code)) {
             return "参数不能为空";
         }
         // 判断验证码是否正确
@@ -86,11 +87,9 @@ public class AuthServiceImpl implements AuthService {
         }
         // 注册用户
         PetUser petUser = new PetUser();
+        petUser.setUsername(username);
         petUser.setEmail(email);
         petUser.setPassword(password);
-        petUser.setEmail(email);
-        //生成用户名
-        petUser.setUsername("用户_" + generateRandomString(4));
         //设置用户状态
         petUser.setIsValid(1);
         boolean saved = petUserService.save(petUser);
