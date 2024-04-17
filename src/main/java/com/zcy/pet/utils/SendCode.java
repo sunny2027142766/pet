@@ -30,7 +30,7 @@ public class SendCode {
         String code = CodeUtil.generateCode(6);
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
         //设置一个html邮件信息
-        helper.setText("<p style='color: blue'>用户您好！你的验证码为：" + code + "(有效期为一分钟)</p>", true);
+        helper.setText("<p style='color: blue'>用户您好！你的验证码为：" + code + "(有效期为5分钟)</p>", true);
         //设置邮件主题名
         helper.setSubject(subject);
         //发给谁-》邮箱地址

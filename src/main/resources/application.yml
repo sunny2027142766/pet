@@ -80,5 +80,5 @@ jwt:
 # 邮箱 配置
 email:
   from: 2027142766@qq.com
-  time: 60
+  time: 3000
   subject: 虚拟宠物互动平台邮箱验证码

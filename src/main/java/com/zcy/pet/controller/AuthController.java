@@ -38,7 +38,8 @@ public class AuthController {
         log.info("邮箱码：{}", email);
         //从redis中取出验证码信息
         String code = String.valueOf(redisUtil.get(email));
-        log.info("验证码：{}", code);
+        //先获取验证码 如果空则可以发送验证码
+        log.info("先从redis获取验证码：{}", code);
         if (!code.equals("null")) {
             return Result.success(code, "验证码已发送,请从邮箱查收");
         }

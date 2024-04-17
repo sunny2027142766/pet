@@ -20,6 +20,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.Random;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -60,7 +62,7 @@ public class AuthServiceImpl implements AuthService {
                 .refreshToken(userToken.getRefreshToken())
                 .expires(Long.valueOf(accessTokenExpire))
                 .build();
-        log.info("登录成功信息{}",loginResult);
+        log.info("登录成功信息{}", loginResult);
         return Result.success(loginResult);
     }
 
@@ -87,8 +89,11 @@ public class AuthServiceImpl implements AuthService {
         petUser.setEmail(email);
         petUser.setPassword(password);
         petUser.setEmail(email);
+        //生成用户名
+        petUser.setUsername("用户_" + generateRandomString(4));
+        //设置用户状态
+        petUser.setIsValid(1);
         boolean saved = petUserService.save(petUser);
-
         if (saved) {
             return "注册成功";
         } else {
@@ -96,4 +101,15 @@ public class AuthServiceImpl implements AuthService {
         }
     }
 
+
+    public String generateRandomString(int length) {
+        final String CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            int randomIndex = random.nextInt(CHARACTERS.length());
+            sb.append(CHARACTERS.charAt(randomIndex));
+        }
+        return sb.toString();
+    }
 }
