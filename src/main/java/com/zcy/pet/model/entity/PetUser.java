@@ -17,6 +17,7 @@ public class PetUser extends BaseEntity {
     private String nickName;
     private String email;
     private String phone;
+    private String avatar;
     @TableLogic(delval = "0", value = "1")
     private Integer isValid;
 }
