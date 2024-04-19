@@ -4,6 +4,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zcy.pet.mapper.PetInfoMapper">
     <select id="getAllPetInfo" resultType="com.zcy.pet.model.entity.PetInfo">
-        select * from pet_role
+        select * from pet_info
     </select>
 </mapper>
