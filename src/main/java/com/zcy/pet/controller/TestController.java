@@ -12,12 +12,14 @@ import com.zcy.pet.service.PetTestService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Tag(name = "测试模块", description = "测试模块接口")
+@Slf4j
 @RestController
 @RequestMapping("/api/test")
 @RequiredArgsConstructor

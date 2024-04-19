@@ -11,11 +11,13 @@ import com.zcy.pet.utils.JwtTokenUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Tag(name = "用户模块", description = "用户模块接口")
+@Slf4j
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
