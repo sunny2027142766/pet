@@ -12,7 +12,7 @@
         pid,
         name,
         type,
-        virtual,
+        `virtual`,
         age,
         weight,
         happy,
@@ -23,15 +23,18 @@
         update_time
         FROM pet_info
         <where>
-            <if test="queryParams.name != null and queryParams.name != ''">
-                name like concat('%',#{queryParams.name},'%')
-            </if>
-            <if test="queryParams.createTime != null and queryParams.createTime != ''">
-                and create_time = #{queryParams.createTime}
-            </if>
-            <if test="queryParams.updateTime != null and queryParams.updateTime != ''">
-                and update_time = #{queryParams.updateTime}
-            </if>
+            <trim prefix="WHERE" prefixOverrides="AND">
+                <if test="queryParams.name != null and queryParams.name != ''">
+                    AND name like concat('%',#{queryParams.name},'%')
+                </if>
+                <if test="queryParams.createTime != null and queryParams.createTime != ''">
+                    AND create_time = #{queryParams.createTime}
+                </if>
+                <if test="queryParams.updateTime != null and queryParams.updateTime != ''">
+                    AND update_time = #{queryParams.updateTime}
+                </if>
+            </trim>
         </where>
     </select>
+
 </mapper>

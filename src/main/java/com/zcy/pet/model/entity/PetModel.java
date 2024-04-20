@@ -13,6 +13,6 @@ public class PetModel extends BaseEntity {
     private Long mid;
     private String name;
     private String url;
-    private Integer img;
-    private String is_valid;
+    private String img;
+    private String isValid;
 }

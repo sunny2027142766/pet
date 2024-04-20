@@ -7,6 +7,6 @@ public class PetModelVo {
     private Long mid;
     private String name;
     private String url;
-    private Integer img;
+    private String img;
     private String is_valid;
 }

@@ -6,4 +6,27 @@
     <select id="getAllPetInfo" resultType="com.zcy.pet.model.entity.PetModel">
         select * from pet_model
     </select>
+
+    <select id="getPagePetModelList" resultType="com.zcy.pet.model.bo.PetModelBo">
+        SELECT
+        mid,
+        name,
+        url,
+        img,
+        is_valid,
+        create_time,
+        update_time
+        FROM pet_model
+        <where>
+            <if test="queryParams.name != null and queryParams.name != ''">
+                name like concat('%',#{queryParams.name},'%')
+            </if>
+            <if test="queryParams.createTime != null and queryParams.createTime != ''">
+                and create_time = #{queryParams.createTime}
+            </if>
+            <if test="queryParams.updateTime != null and queryParams.updateTime != ''">
+                and update_time = #{queryParams.updateTime}
+            </if>
+        </where>
+    </select>
 </mapper>
