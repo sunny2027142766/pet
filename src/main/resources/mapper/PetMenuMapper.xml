@@ -6,4 +6,30 @@
     <select id="getAllPetMenu" resultType="com.zcy.pet.model.entity.PetMenu">
         select * from pet_menu
     </select>
+
+    <select id="getPagePetMenuList" resultType="com.zcy.pet.model.bo.PetMenuBo">
+        SELECT
+        mid,
+        title,
+        path,
+        icon,
+        is_valid,
+        create_time,
+        update_time
+        FROM pet_menu
+        <where>
+            <trim prefix="WHERE" prefixOverrides="AND">
+                <if test="queryParams.title != null and queryParams.title != ''">
+                    AND title like concat('%',#{queryParams.title},'%')
+                </if>
+                <if test="queryParams.createTime != null and queryParams.createTime != ''">
+                    AND create_time = #{queryParams.createTime}
+                </if>
+                <if test="queryParams.updateTime != null and queryParams.updateTime != ''">
+                    AND update_time = #{queryParams.updateTime}
+                </if>
+            </trim>
+        </where>
+    </select>
+
 </mapper>
