@@ -6,4 +6,30 @@
     <select id="getAllPetInfo" resultType="com.zcy.pet.model.entity.PetPost">
         select * from pet_post
     </select>
+
+    <select id="getPagePetPostList" resultType="com.zcy.pet.model.bo.PetPostBo">
+        SELECT
+        pid,
+        title,
+        pet_post.desc,
+        content,
+        comment_num,
+        like_num,
+        share_num,
+        is_valid,
+        create_time,
+        update_time
+        FROM pet_post
+        <where>
+            <if test="queryParams.title != null and queryParams.title != ''">
+                title like concat('%',#{queryParams.title},'%')
+            </if>
+            <if test="queryParams.createTime != null and queryParams.createTime != ''">
+                and create_time = #{queryParams.createTime}
+            </if>
+            <if test="queryParams.updateTime != null and queryParams.updateTime != ''">
+                and update_time = #{queryParams.updateTime}
+            </if>
+        </where>
+    </select>
 </mapper>
