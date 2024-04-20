@@ -3,7 +3,29 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zcy.pet.mapper.PetPermissionMapper">
-    <select id="getAllPetInfo" resultType="com.zcy.pet.model.entity.PetPermission">
+    <select id="getAllPetPermission" resultType="com.zcy.pet.model.entity.PetPermission">
         select * from pet_permission
+    </select>
+
+    <select id="getPagePetPermList" resultType="com.zcy.pet.model.bo.PetPermissionBo">
+        SELECT
+        pid,
+        permission_name,
+        pet_permission.desc,
+        is_valid,
+        create_time,
+        update_time
+        FROM pet_permission
+        <where>
+            <if test="queryParams.permissionName != null and queryParams.permissionName != ''">
+                permission_name like concat('%',#{queryParams.permissionName},'%')
+            </if>
+            <if test="queryParams.createTime != null and queryParams.createTime != ''">
+                and create_time = #{queryParams.createTime}
+            </if>
+            <if test="queryParams.updateTime != null and queryParams.updateTime != ''">
+                and update_time = #{queryParams.updateTime}
+            </if>
+        </where>
     </select>
 </mapper>
