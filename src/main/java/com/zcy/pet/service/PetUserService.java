@@ -1,8 +1,13 @@
 package com.zcy.pet.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.zcy.pet.common.result.PageResult;
 import com.zcy.pet.model.entity.PetUser;
+import com.zcy.pet.model.query.PetTestPageQuery;
+import com.zcy.pet.model.query.PetUserPageQuery;
+import com.zcy.pet.model.vo.PetTestPageVo;
+import com.zcy.pet.model.vo.PetUserPageVo;
 import com.zcy.pet.model.vo.PetUserVo;
 
 import java.util.List;
@@ -19,5 +24,5 @@ public interface PetUserService extends IService<PetUser> {
 
     boolean updateUserById(PetUser petUser);
 
-    PageResult<PetUserVo> getAllPetUserPage(Integer pageNo, Integer pageSize);
+    IPage<PetUserPageVo> getPetUserPageList(PetUserPageQuery petUserPageQuery);
 }

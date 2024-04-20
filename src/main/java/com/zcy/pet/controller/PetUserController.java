@@ -1,9 +1,13 @@
 package com.zcy.pet.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.zcy.pet.common.result.PageResult;
 import com.zcy.pet.common.result.Result;
 import com.zcy.pet.converter.PetUserConverter;
 import com.zcy.pet.model.entity.PetUser;
+import com.zcy.pet.model.query.PetTestPageQuery;
+import com.zcy.pet.model.query.PetUserPageQuery;
+import com.zcy.pet.model.vo.PetUserPageVo;
 import com.zcy.pet.model.vo.PetUserVo;
 import com.zcy.pet.model.vo.UserToken;
 import com.zcy.pet.service.PetUserService;
@@ -12,6 +16,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,13 +31,11 @@ public class PetUserController {
     private final PetUserConverter petUserConverter;
     private final JwtTokenUtil jwtTokenUtil;
     @Operation(description = "分页查询所有用户接口")
-    @GetMapping("/{pageSize}/{pageNo}")
-    // TODO: 2024/4/15  可添加分页查询条件
-    public Result<PageResult<PetUserVo>> getAllUsersPage(@PathVariable Integer pageSize, @PathVariable Integer pageNo) {
+    @GetMapping("/page")
+    public PageResult<PetUserPageVo> getAllUsersPage(@ParameterObject PetUserPageQuery petUserPageQuery) {
         //  调用service查询所有结果
-        PageResult<PetUserVo> allPetUserPage = petUserService.getAllPetUserPage(pageSize, pageNo);
-        // 封装结果
-        return Result.success(allPetUserPage);
+        IPage<PetUserPageVo> petUserPageList = petUserService.getPetUserPageList(petUserPageQuery);
+        return PageResult.success(petUserPageList);
     }
 
     @Operation(description = "查询所有用户接口")

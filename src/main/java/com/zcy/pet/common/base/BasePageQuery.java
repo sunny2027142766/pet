@@ -10,6 +10,6 @@ public class BasePageQuery {
     @Schema(description = "页码", example = "1")
     private Integer pageNum = 1;
 
-    @Schema(description = "每页记录数", example = "10")
-    private Integer pageSize = 10;
+    @Schema(description = "每页记录数", example = "5")
+    private Integer pageSize = 5;
 }

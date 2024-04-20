@@ -6,4 +6,27 @@
     <select id="getAllPetRole" resultType="com.zcy.pet.model.entity.PetRole">
         select * from pet_role
     </select>
+
+    <select id="getPagePetRoleList" resultType="com.zcy.pet.model.bo.PetRoleBo">
+        SELECT
+        rid,
+        role_name,
+        role_remark,
+        pet_role.desc,
+        is_valid,
+        create_time,
+        update_time
+        FROM pet_role
+        <where>
+            <if test="queryParams.roleName != null and queryParams.roleName != ''">
+                role_name like concat('%',#{queryParams.roleName},'%')
+            </if>
+            <if test="queryParams.createTime != null and queryParams.createTime != ''">
+                and create_time = #{queryParams.createTime}
+            </if>
+            <if test="queryParams.updateTime != null and queryParams.updateTime != ''">
+                and update_time = #{queryParams.updateTime}
+            </if>
+        </where>
+    </select>
 </mapper>

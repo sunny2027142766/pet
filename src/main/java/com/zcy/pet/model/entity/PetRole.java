@@ -11,6 +11,7 @@ import lombok.EqualsAndHashCode;
 public class PetRole  extends BaseEntity {
     @TableId(type = IdType.AUTO)
     private Long rid;
+    private String roleName;
     private String roleRemark;
     private String desc;
     private Integer isValid;

@@ -6,4 +6,33 @@
     <select id="getAllPetUser" resultType="com.zcy.pet.model.entity.PetUser">
         select * from pet_user
     </select>
+
+    <select id="getPagePetUserList" resultType="com.zcy.pet.model.bo.PetUserBo">
+        SELECT
+        uid,
+        username,
+        password,
+        nick_name,
+        email,
+        phone,
+        avatar,
+        is_valid,
+        create_time,
+        update_time
+        FROM pet_user
+        <where>
+            <if test="queryParams.username != null and queryParams.username != ''">
+                username like concat('%',#{queryParams.username},'%')
+            </if>
+            <if test="queryParams.email != null and queryParams.email != ''">
+                and email like concat('%',#{email},'%')
+            </if>
+            <if test="queryParams.createTime != null and queryParams.createTime != ''">
+                and create_time = #{queryParams.createTime}
+            </if>
+            <if test="queryParams.updateTime != null and queryParams.updateTime != ''">
+                and update_time = #{queryParams.updateTime}
+            </if>
+        </where>
+    </select>
 </mapper>

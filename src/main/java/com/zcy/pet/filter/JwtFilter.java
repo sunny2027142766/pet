@@ -31,6 +31,9 @@ public class JwtFilter implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
         // 获取token
         String token = request.getHeader(jwtTokenUtil.header);
+        // 截取token
+        token = token.replace("Bearer", "");
+        log.info("token：{}", token);
         if (!StringUtils.hasLength(token)) {
             log.error("token 不能为空！");
             ResponseUtils.writeErrMsg(response, ResultCode.ACCESS_UNAUTHORIZED);
