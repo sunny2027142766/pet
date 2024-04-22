@@ -21,4 +21,6 @@ public interface PetUserRoleService extends IService<PetUserRole> {
      * @return boolean
      */
     boolean hasAssignedUsers(Long roleId);
+
+    List<String> getUserRoleListByUserId(Long uid);
 }

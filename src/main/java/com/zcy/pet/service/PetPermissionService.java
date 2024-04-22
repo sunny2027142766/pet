@@ -42,4 +42,6 @@ public interface PetPermissionService extends IService<PetPermission> {
      * @return boolean
      */
     boolean deletePerms(String ids);
+
+
 }

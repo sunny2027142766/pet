@@ -1,11 +1,17 @@
 package com.zcy.pet.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.zcy.pet.common.result.PageResult;
 import com.zcy.pet.common.result.Result;
+import com.zcy.pet.model.entity.PetRole;
+import com.zcy.pet.model.entity.PetUserRole;
 import com.zcy.pet.model.form.UserForm;
 import com.zcy.pet.model.query.PetUserPageQuery;
 import com.zcy.pet.model.vo.*;
+import com.zcy.pet.service.PetPermissionService;
+import com.zcy.pet.service.PetRoleService;
+import com.zcy.pet.service.PetUserRoleService;
 import com.zcy.pet.service.PetUserService;
 import com.zcy.pet.utils.JwtTokenUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,7 +25,9 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Tag(name = "用户模块", description = "用户模块接口")
 @Slf4j
@@ -30,6 +38,9 @@ public class PetUserController {
 
     private final PetUserService petUserService;
     private final JwtTokenUtil jwtTokenUtil;
+    private final PetPermissionService petPermissionService;
+    private final PetRoleService petRoleService;
+    private final PetUserRoleService petUserRoleService;
 
     @Operation(description = "分页查询所有用户接口")
     @GetMapping("/page")
@@ -57,19 +68,27 @@ public class PetUserController {
         log.info("token: {}", token);
         //zf TODO:  需要根据用户ID查询这个用户的信息以及角色和权限编码数组 格式在PetUserInfoVo中定义
         PetUserInfoVo userInfoVo = petUserService.getUserInfoById(uid);
+        List<String> RoleList = petUserRoleService.getUserRoleListByUserId(uid);
+        HashMap<String, List<String>> roleMapRerms = new HashMap<>();
+        for (String perm : RoleList) {
+            LambdaQueryWrapper<PetUserRole> wrapper = new LambdaQueryWrapper<>();
+            List<String> collect = petRoleService.list(new LambdaQueryWrapper<PetRole>().eq(PetRole::getRid, perm)).stream().map(item -> item.getRoleCode()).collect(Collectors.toList());
+            roleMapRerms.put(perm, collect);
+        }
+        userInfoVo.setRoleMapPerms(roleMapRerms);
         return Result.success(userInfoVo);
     }
 
     @Operation(summary = "新增用户")
     @PostMapping
-    public Result saveUser( @RequestBody @Valid UserForm userForm) {
+    public Result saveUser(@RequestBody @Valid UserForm userForm) {
         boolean result = petUserService.saveUser(userForm);
         return Result.judge(result);
     }
 
     @Operation(description = "修改用户")
     @PutMapping("/{userId}")
-    public Result<PetUserVo> updateUser( @Parameter(description = "用户ID") @PathVariable Long userId, @RequestBody @Validated UserForm userForm) {
+    public Result<PetUserVo> updateUser(@Parameter(description = "用户ID") @PathVariable Long userId, @RequestBody @Validated UserForm userForm) {
         boolean result = petUserService.updateUser(userId, userForm);
         return Result.judge(result);
     }

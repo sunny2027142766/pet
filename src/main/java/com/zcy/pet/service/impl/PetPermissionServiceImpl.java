@@ -1,5 +1,6 @@
 package com.zcy.pet.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -8,6 +9,7 @@ import com.zcy.pet.mapper.PetPermissionMapper;
 import com.zcy.pet.model.bo.PetPermissionBo;
 import com.zcy.pet.model.bo.PetRoleBo;
 import com.zcy.pet.model.entity.PetPermission;
+import com.zcy.pet.model.entity.PetRole;
 import com.zcy.pet.model.form.PermForm;
 import com.zcy.pet.model.query.PetPermPageQuery;
 import com.zcy.pet.model.vo.PetPermissionVo;
@@ -55,4 +57,7 @@ public class PetPermissionServiceImpl extends ServiceImpl<PetPermissionMapper, P
     public boolean deletePerms(String ids) {
         return false;
     }
+
+
+
 }

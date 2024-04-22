@@ -15,6 +15,8 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class PetUserRoleServiceImpl extends ServiceImpl<PetUserRoleMapper, PetUserRole> implements PetUserRoleService {
+
+
     @Override
     public boolean saveUserRoles(Long uid, List<Long> rids) {
         if (uid == null || CollectionUtil.isEmpty(rids)) {
@@ -24,9 +26,9 @@ public class PetUserRoleServiceImpl extends ServiceImpl<PetUserRoleMapper, PetUs
         // 用户原角色ID集合
         List<Long> userRoleIds = this.list(new LambdaQueryWrapper<PetUserRole>()
                         .eq(PetUserRole::getUid, uid))
-                        .stream()
-                        .map(PetUserRole::getRid)
-                        .collect(Collectors.toList());
+                .stream()
+                .map(PetUserRole::getRid)
+                .collect(Collectors.toList());
 
         // 新增用户角色
         List<Long> saveRoleIds;
@@ -64,5 +66,14 @@ public class PetUserRoleServiceImpl extends ServiceImpl<PetUserRoleMapper, PetUs
     public boolean hasAssignedUsers(Long roleId) {
         int count = this.baseMapper.countUsersForRole(roleId);
         return count > 0;
+    }
+
+    @Override
+    public List<String> getUserRoleListByUserId(Long uid) {
+        LambdaQueryWrapper<PetUserRole> query = new LambdaQueryWrapper<>();
+        query.eq(PetUserRole::getUid, uid);
+        List<PetUserRole> list = this.list(query);
+        List<String> roleList = list.stream().map(PetUserRole::getRid).map(String::valueOf).collect(Collectors.toList());
+        return roleList;
     }
 }
