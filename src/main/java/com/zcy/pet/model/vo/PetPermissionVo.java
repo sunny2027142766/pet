@@ -7,5 +7,5 @@ import lombok.Data;
 public class PetPermissionVo {
     private Long pid;
     private String permissionName;
-    private String desc;
+    private String description;
 }

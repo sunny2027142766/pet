@@ -11,7 +11,7 @@
         SELECT
         pid,
         title,
-        pet_post.desc,
+        description,
         content,
         comment_num,
         like_num,

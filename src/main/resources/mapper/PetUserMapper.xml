@@ -7,32 +7,42 @@
         select * from pet_user
     </select>
 
+    <!-- 用户分页列表 -->
     <select id="getPagePetUserList" resultType="com.zcy.pet.model.bo.PetUserBo">
         SELECT
-        uid,
-        username,
-        password,
-        nick_name,
-        email,
-        phone,
-        avatar,
-        is_valid,
-        create_time,
-        update_time
-        FROM pet_user
+        u.uid,
+        u.password,
+        u.username,
+        u.nick_name,
+        u.email,
+        u.phone,
+        u.avatar,
+        u.status,
+        GROUP_CONCAT( r.role_name ) AS roleNames,
+        u.create_time
+        FROM
+        pet_user u
+        LEFT JOIN pet_user_role pur ON u.uid = pur.uid
+        LEFT JOIN pet_role r ON pur.rid = r.rid
         <where>
-            <if test="queryParams.username != null and queryParams.username != ''">
-                username like concat('%',#{queryParams.username},'%')
+            u.deleted = 0
+            <if test='queryParams.keywords!=null and queryParams.keywords.trim() neq ""'>
+                AND (
+                u.username LIKE CONCAT('%',#{queryParams.keywords},'%')
+                OR u.nick_name LIKE CONCAT('%',#{queryParams.keywords},'%')
+                OR u.phone LIKE CONCAT('%',#{queryParams.keywords},'%')
+                )
             </if>
-            <if test="queryParams.email != null and queryParams.email != ''">
-                and email like concat('%',#{email},'%')
+            <if test='queryParams.status!=null'>
+                AND u.status = #{queryParams.status}
             </if>
-            <if test="queryParams.createTime != null and queryParams.createTime != ''">
-                and create_time = #{queryParams.createTime}
+            <if test="queryParams.startTime != null">
+                AND u.create_time &gt;= #{queryParams.startTime}
             </if>
-            <if test="queryParams.updateTime != null and queryParams.updateTime != ''">
-                and update_time = #{queryParams.updateTime}
+            <if test="queryParams.endTime != null">
+                AND u.create_time &lt;= #{queryParams.endTime}
             </if>
         </where>
+        GROUP BY u.uid
     </select>
 </mapper>

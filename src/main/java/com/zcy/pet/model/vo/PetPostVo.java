@@ -6,7 +6,7 @@ import lombok.Data;
 public class PetPostVo {
     private Long pid;
     private String title;
-    private String desc;
+    private String description;
     private Integer content;
     private String commentNum;
     private String likeNum;

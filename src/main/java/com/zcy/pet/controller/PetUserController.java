@@ -3,20 +3,20 @@ package com.zcy.pet.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.zcy.pet.common.result.PageResult;
 import com.zcy.pet.common.result.Result;
-import com.zcy.pet.converter.PetUserConverter;
-import com.zcy.pet.model.entity.PetUser;
-import com.zcy.pet.model.query.PetTestPageQuery;
+import com.zcy.pet.model.form.UserForm;
 import com.zcy.pet.model.query.PetUserPageQuery;
-import com.zcy.pet.model.vo.PetUserPageVo;
-import com.zcy.pet.model.vo.PetUserVo;
-import com.zcy.pet.model.vo.UserToken;
+import com.zcy.pet.model.vo.*;
 import com.zcy.pet.service.PetUserService;
 import com.zcy.pet.utils.JwtTokenUtil;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,9 +27,10 @@ import java.util.List;
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
 public class PetUserController {
+
     private final PetUserService petUserService;
-    private final PetUserConverter petUserConverter;
     private final JwtTokenUtil jwtTokenUtil;
+
     @Operation(description = "分页查询所有用户接口")
     @GetMapping("/page")
     public PageResult<PetUserPageVo> getAllUsersPage(@ParameterObject PetUserPageQuery petUserPageQuery) {
@@ -41,45 +42,42 @@ public class PetUserController {
     @Operation(description = "查询所有用户接口")
     @GetMapping
     public Result<List<PetUserVo>> getAllUsers() {
-        //  调用service查询所有结果
         List<PetUserVo> list = petUserService.getAllPetUser();
-        // 封装结果
         return Result.success(list);
     }
 
-    @Operation(description = "根据id查询用户")
-    @GetMapping("/{id}")
-    public Result<PetUserVo> getUserById(@PathVariable Integer id) {
-        // TODO: 2024/4/15  此处应用jwt解出userid
-        //  调用service查询所有结果
-        PetUserVo UserVo = petUserService.getUserById(id);
-        // 封装结果
-        return Result.success(UserVo);
+    @Operation(description = "查询用户登录信息")
+    @GetMapping("/info")
+    public Result<PetUserInfoVo> getUserInfoById(HttpServletRequest request) {
+        String header = request.getHeader(jwtTokenUtil.header);
+        // 截取token
+        String token = header.replace("Bearer", "");
+        UserTokenInfo userInfoToken = jwtTokenUtil.getUserInfoToken(token);
+        Long uid = userInfoToken.getUid();
+        log.info("token: {}", token);
+        //zf TODO:  需要根据用户ID查询这个用户的信息以及角色和权限编码数组 格式在PetUserInfoVo中定义
+        PetUserInfoVo userInfoVo = petUserService.getUserInfoById(uid);
+        return Result.success(userInfoVo);
     }
 
-    @Operation(description = "根据id修改用户")
-    @PutMapping("/updateUser")
-    public Result<PetUserVo> updateUser(@RequestBody PetUser petUser) {
-        //  调用service查询所有结果
-        boolean flag = petUserService.updateUserById(petUser);
-        // 封装结果
-        if (flag) {
-            return Result.success(petUserConverter.entityToVo(petUser));
-        }
-        return Result.failed("修改失败");
+    @Operation(summary = "新增用户")
+    @PostMapping
+    public Result saveUser( @RequestBody @Valid UserForm userForm) {
+        boolean result = petUserService.saveUser(userForm);
+        return Result.judge(result);
     }
 
-    @Operation(description = "根据id修改用户")
-    @DeleteMapping("/{id}")
-    public Result<Boolean> updateUser(@PathVariable Integer id) {
-        // TODO: 2024/4/15  此处应用jwt解出userid
-        //  调用service查询所有结果
-        boolean flag = petUserService.removeById(id);
-        // 封装结果
-        if (flag) {
-            return Result.success(null, "删除成功");
-        }
-        return Result.failed("修改失败");
+    @Operation(description = "修改用户")
+    @PutMapping("/{userId}")
+    public Result<PetUserVo> updateUser( @Parameter(description = "用户ID") @PathVariable Long userId, @RequestBody @Validated UserForm userForm) {
+        boolean result = petUserService.updateUser(userId, userForm);
+        return Result.judge(result);
     }
 
+    @Operation(summary = "删除用户")
+    @DeleteMapping("/{ids}")
+    public Result deleteUsers(@Parameter(description = "用户ID，多个以英文逗号(,)分割") @PathVariable String ids) {
+        boolean result = petUserService.deleteUsers(ids);
+        return Result.judge(result);
+    }
 }

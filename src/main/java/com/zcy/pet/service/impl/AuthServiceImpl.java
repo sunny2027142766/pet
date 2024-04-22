@@ -91,7 +91,8 @@ public class AuthServiceImpl implements AuthService {
         petUser.setEmail(email);
         petUser.setPassword(password);
         //设置用户状态
-        petUser.setIsValid(1);
+        petUser.setDeleted(0);
+        petUser.setStatus(1);
         boolean saved = petUserService.save(petUser);
         if (saved) {
             return "注册成功";

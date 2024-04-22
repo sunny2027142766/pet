@@ -11,7 +11,7 @@
         SELECT
         pid,
         permission_name,
-        pet_permission.desc,
+        description,
         is_valid,
         create_time,
         update_time

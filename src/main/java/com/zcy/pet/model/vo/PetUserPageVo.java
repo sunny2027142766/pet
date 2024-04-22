@@ -1,6 +1,9 @@
 package com.zcy.pet.model.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+
+import java.util.Date;
 
 /**
  * 用户信息分页vo视图
@@ -14,5 +17,9 @@ public class PetUserPageVo {
     private String email;
     private String phone;
     private String avatar;
-    private Integer isValid;
+    private Integer status;
+    private String roleNames;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date createTime;
 }

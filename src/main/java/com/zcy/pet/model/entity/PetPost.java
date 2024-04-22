@@ -12,7 +12,7 @@ public class PetPost extends BaseEntity {
     @TableId(type = IdType.AUTO)
     private Long pid;
     private String title;
-    private String desc;
+    private String description;
     private Integer content;
     private String commentNum;
     private String likeNum;

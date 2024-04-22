@@ -8,6 +8,7 @@ import com.zcy.pet.mapper.PetPermissionMapper;
 import com.zcy.pet.model.bo.PetPermissionBo;
 import com.zcy.pet.model.bo.PetRoleBo;
 import com.zcy.pet.model.entity.PetPermission;
+import com.zcy.pet.model.form.PermForm;
 import com.zcy.pet.model.query.PetPermPageQuery;
 import com.zcy.pet.model.vo.PetPermissionVo;
 import com.zcy.pet.service.PetPermissionService;
@@ -38,5 +39,20 @@ public class PetPermissionServiceImpl extends ServiceImpl<PetPermissionMapper, P
         Page<PetPermissionBo> petPermissionBo = this.baseMapper.getPagePetPermList(pageQuery, petPermPageQuery);
         // 数据转换
         return petPermissionConverter.boToPageVo(petPermissionBo);
+    }
+
+    @Override
+    public boolean savePerm(PermForm permForm) {
+        return false;
+    }
+
+    @Override
+    public boolean updatePerm(Long pid, PermForm permForm) {
+        return false;
+    }
+
+    @Override
+    public boolean deletePerms(String ids) {
+        return false;
     }
 }

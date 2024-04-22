@@ -11,6 +11,7 @@ import lombok.EqualsAndHashCode;
 public class PetPermission extends BaseEntity {
     @TableId(type = IdType.AUTO)
     private Long pid;
-    private String permissionName;
-    private String desc;
+    private String permName;
+    private String permCode;
+    private String description;
 }

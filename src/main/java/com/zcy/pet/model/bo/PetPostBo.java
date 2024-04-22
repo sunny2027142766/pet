@@ -9,7 +9,7 @@ import lombok.Data;
 public class PetPostBo {
     private Long pid;
     private String title;
-    private String desc;
+    private String description;
     private Integer content;
     private String commentNum;
     private String likeNum;

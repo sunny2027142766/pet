@@ -9,7 +9,7 @@ import lombok.Data;
 public class PetPermissionBo {
     private Long pid;
     private String permissionName;
-    private String desc;
+    private String description;
     private String createTime;
     private String updateTime;
 }

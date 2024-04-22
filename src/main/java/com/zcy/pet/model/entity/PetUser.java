@@ -12,12 +12,23 @@ import lombok.EqualsAndHashCode;
 public class PetUser extends BaseEntity {
     @TableId(type = IdType.AUTO)
     private Long uid;
+
     private String username;
+
     private String password;
+
     private String nickName;
+
     private String email;
+
     private String phone;
+
     private String avatar;
-    @TableLogic(delval = "0", value = "1")
-    private Integer isValid;
+
+    private Integer status;
+    /**
+     * 逻辑删除标识(0:未删除;1:已删除)
+     */
+    @TableLogic(delval = "1", value = "0")
+    private Integer deleted;
 }

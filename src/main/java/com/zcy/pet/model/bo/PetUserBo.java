@@ -1,6 +1,9 @@
 package com.zcy.pet.model.bo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+
+import java.util.Date;
 
 /**
  *  用户表持久化对象
@@ -14,7 +17,11 @@ public class PetUserBo {
     private String email;
     private String phone;
     private String avatar;
-    private Integer isValid;
-    private String createTime;
-    private String updateTime;
+    private Integer status;
+    private String roleNames;
+    /**
+     * 创建时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date createTime;
 }

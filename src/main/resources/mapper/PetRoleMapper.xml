@@ -11,21 +11,24 @@
         SELECT
         rid,
         role_name,
-        role_remark,
-        pet_role.desc,
-        is_valid,
-        create_time,
-        update_time
+        role_code,
+        description,
+        status,
+        create_time
         FROM pet_role
         <where>
+            pet_role.deleted = 0
             <if test="queryParams.roleName != null and queryParams.roleName != ''">
-                role_name like concat('%',#{queryParams.roleName},'%')
+                AND role_name like concat('%',#{queryParams.roleName},'%')
             </if>
-            <if test="queryParams.createTime != null and queryParams.createTime != ''">
-                and create_time = #{queryParams.createTime}
+            <if test='queryParams.status!=null'>
+                AND status = #{queryParams.status}
             </if>
-            <if test="queryParams.updateTime != null and queryParams.updateTime != ''">
-                and update_time = #{queryParams.updateTime}
+            <if test="queryParams.startTime != null">
+                AND create_time &gt;= #{queryParams.startTime}
+            </if>
+            <if test="queryParams.endTime != null">
+                AND create_time &lt;= #{queryParams.endTime}
             </if>
         </where>
     </select>
