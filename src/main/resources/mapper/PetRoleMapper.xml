@@ -9,15 +9,19 @@
 
     <select id="getPagePetRoleList" resultType="com.zcy.pet.model.bo.PetRoleBo">
         SELECT
-        rid,
-        role_name,
-        role_code,
-        description,
-        status,
-        create_time
-        FROM pet_role
+        r.rid,
+        r.role_name,
+        r.role_code,
+        r.description,
+        r.status,
+        r.create_time,
+        GROUP_CONCAT( p.pid ) AS pids
+        FROM
+            pet_role r
+            LEFT JOIN pet_role_permission prp ON r.rid = prp.rid
+            LEFT JOIN pet_permission p ON prp.pid = p.pid
         <where>
-            pet_role.deleted = 0
+            r.deleted = 0
             <if test="queryParams.roleName != null and queryParams.roleName != ''">
                 AND role_name like concat('%',#{queryParams.roleName},'%')
             </if>
@@ -31,5 +35,6 @@
                 AND create_time &lt;= #{queryParams.endTime}
             </if>
         </where>
+        GROUP BY r.rid
     </select>
 </mapper>

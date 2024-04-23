@@ -15,6 +15,7 @@ public class PetPermissionBo {
     private String permCode;
     private String description;
     private Integer status;
+    private String mids; //  菜单ids
     /**
      * 创建时间
      */

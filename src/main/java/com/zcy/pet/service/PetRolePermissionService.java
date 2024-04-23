@@ -15,4 +15,11 @@ public interface PetRolePermissionService extends IService<PetRolePermission> {
      * @return boolean
      */
     boolean saveRolePerms(Long roleId, List<Long> pids);
+
+    /**
+     * 判断权限是否存在绑定的角色
+     * @param pid 角色ID
+     * @return boolean
+     */
+    boolean hasAssignedRoles(Long pid);
 }

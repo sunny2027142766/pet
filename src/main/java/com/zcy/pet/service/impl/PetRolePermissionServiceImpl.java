@@ -17,16 +17,22 @@ import java.util.stream.Collectors;
 public class PetRolePermissionServiceImpl extends ServiceImpl<PetRolePermissionMapper, PetRolePermission> implements PetRolePermissionService {
     @Override
     public boolean saveRolePerms(Long roleId, List<Long> pids) {
-        if (roleId == null || CollectionUtil.isEmpty(pids)) {
+        if (roleId == null) {
             return false;
+        }
+        if (CollectionUtil.isEmpty(pids)) {
+            // pids 为空数组,证明该角色没有任何权限,需要删除角色关联的权限信息
+            this.remove(new LambdaQueryWrapper<PetRolePermission>()
+                    .eq(PetRolePermission::getRid, roleId));
+            return true;
         }
 
         // 原角色权限ID集合
         List<Long> userPermIds = this.list(new LambdaQueryWrapper<PetRolePermission>()
                         .eq(PetRolePermission::getRid, roleId))
-                        .stream()
-                        .map(PetRolePermission::getRid)
-                        .toList();
+                .stream()
+                .map(PetRolePermission::getPid)
+                .toList();
 
         // 新增角色权限
         List<Long> savePermIds;
@@ -34,7 +40,7 @@ public class PetRolePermissionServiceImpl extends ServiceImpl<PetRolePermissionM
             savePermIds = pids;
         } else {
             savePermIds = pids.stream()
-                    .filter(rid -> !userPermIds.contains(rid))
+                    .filter(pid -> !userPermIds.contains(pid))
                     .collect(Collectors.toList());
         }
 
@@ -58,5 +64,11 @@ public class PetRolePermissionServiceImpl extends ServiceImpl<PetRolePermissionM
             }
         }
         return true;
+    }
+
+    @Override
+    public boolean hasAssignedRoles(Long pid) {
+        int count = this.baseMapper.countRolesForPerm(pid);
+        return count > 0;
     }
 }

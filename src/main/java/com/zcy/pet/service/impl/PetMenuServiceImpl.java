@@ -13,12 +13,14 @@ import com.zcy.pet.mapper.PetMenuMapper;
 import com.zcy.pet.model.bo.PetInfoBo;
 import com.zcy.pet.model.bo.PetMenuBo;
 import com.zcy.pet.model.entity.PetMenu;
+import com.zcy.pet.model.entity.PetPermission;
 import com.zcy.pet.model.entity.PetRole;
 import com.zcy.pet.model.form.MenuForm;
 import com.zcy.pet.model.query.PetMenuPageQuery;
 import com.zcy.pet.model.vo.PetMenuPageVo;
 import com.zcy.pet.model.vo.PetMenuVo;
 import com.zcy.pet.service.PetMenuService;
+import com.zcy.pet.service.PetPermMenuService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,8 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class PetMenuServiceImpl extends ServiceImpl<PetMenuMapper, PetMenu> implements PetMenuService {
     private final PetMenuConverter petMenuConverter;
+
+    private final PetPermMenuService petPermMenuService;
 
     @Override
     public List<PetMenu> getAllPetMenuList() {
@@ -84,14 +88,26 @@ public class PetMenuServiceImpl extends ServiceImpl<PetMenuMapper, PetMenu> impl
 
     @Override
     public boolean deleteMenus(String idStr) {
-        Assert.isTrue(StrUtil.isNotBlank(idStr), "删除的数据为空");
-
-        // 逻辑删除
-        List<Long> ids = Arrays.stream(idStr.split(","))
+        Assert.isTrue(StrUtil.isNotBlank(idStr), "删除的菜单ID不能为空");
+        // 获取需要删除的权限ID列表
+        List<Long> mids = Arrays.stream(idStr.split(","))
                 .map(Long::parseLong)
                 .toList();
 
-        return this.removeByIds(ids);
+        for (Long mid : mids) {
+            PetMenu menu = this.getById(mid);
+            Assert.isTrue(menu != null, "菜单不存在");
+
+            // 判断权限是否被角色关联
+            boolean isRoleAssigned = petPermMenuService.hasAssignedPerms(mid);
+            Assert.isTrue(!isRoleAssigned, "菜单【{}】已分配给权限，请先解除关联后删除", menu.getTitle());
+
+            boolean deleteResult = this.removeById(mid);
+            if (deleteResult) {
+                // TODO: 删除成功,删除权限关联权限信息
+            }
+        }
+        return true;
     }
 
     @Override

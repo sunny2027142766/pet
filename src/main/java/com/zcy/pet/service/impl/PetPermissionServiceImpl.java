@@ -1,6 +1,7 @@
 package com.zcy.pet.service.impl;
 
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -17,10 +18,12 @@ import com.zcy.pet.model.query.PetPermPageQuery;
 import com.zcy.pet.model.vo.PetPermissionVo;
 import com.zcy.pet.service.PetPermMenuService;
 import com.zcy.pet.service.PetPermissionService;
+import com.zcy.pet.service.PetRolePermissionService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -30,6 +33,7 @@ public class PetPermissionServiceImpl extends ServiceImpl<PetPermissionMapper, P
     private final PetPermissionConverter petPermissionConverter;
 
     private final PetPermMenuService petPermMenuService;
+    private final PetRolePermissionService petRolePermissionService;
 
     @Override
     public List<PetPermissionVo> getAllPetPermissionList() {
@@ -60,7 +64,7 @@ public class PetPermissionServiceImpl extends ServiceImpl<PetPermissionMapper, P
                                 .or()
                                 .eq(PetPermission::getPermName, permForm.getPermName())
                 ));
-        Assert.isTrue(count == 0, "菜单名称或菜单编码已存在，请修改后重试！");
+        Assert.isTrue(count == 0, "权限名称或权限编码已存在，请修改后重试！");
 
         // 实体转换
         PetPermission perm = petPermissionConverter.form2Entity(permForm);
@@ -75,12 +79,56 @@ public class PetPermissionServiceImpl extends ServiceImpl<PetPermissionMapper, P
 
     @Override
     public boolean updatePerm(Long pid, PermForm permForm) {
-        return false;
+        // 编辑权限时，判断权限是否存在
+        PetPermission oldPerm = null;
+        if (pid != null) {
+            oldPerm = this.getById(pid);
+            Assert.isTrue(oldPerm != null, "权限不存在");
+        }
+        permForm.setPid(pid);
+        String permCode = permForm.getPermCode();
+        long count = this.count(new LambdaQueryWrapper<PetPermission>()
+                .ne(pid != null, PetPermission::getPid, pid)
+                .and(
+                        wrapper -> wrapper.eq(PetPermission::getPermCode, permCode)
+                                .or()
+                                .eq(PetPermission::getPermName, permForm.getPermName())
+                ));
+        Assert.isTrue(count == 0, "权限名称或权限编码已存在，请修改后重试！");
+
+        // 实体转换
+        PetPermission perm = petPermissionConverter.form2Entity(permForm);
+
+        boolean result = this.updateById(perm);
+        if (result) {
+            // 添加菜单信息
+            petPermMenuService.savePermMenus(perm.getPid(), permForm.getMids());
+        }
+        return result;
     }
 
     @Override
     public boolean deletePerms(String ids) {
-        return false;
+        Assert.isTrue(StrUtil.isNotBlank(ids), "删除的权限ID不能为空");
+        // 获取需要删除的权限ID列表
+        List<Long> pIds = Arrays.stream(ids.split(","))
+                .map(Long::parseLong)
+                .toList();
+
+        for (Long pid : pIds) {
+            PetPermission perm = this.getById(pid);
+            Assert.isTrue(perm != null, "权限不存在");
+
+            // 判断权限是否被角色关联
+            boolean isRoleAssigned = petRolePermissionService.hasAssignedRoles(pid);
+            Assert.isTrue(!isRoleAssigned, "权限【{}】已分配给角色，请先解除关联后删除", perm.getPermName());
+
+            boolean deleteResult = this.removeById(pid);
+            if (deleteResult) {
+                // TODO: 删除成功,删除权限关联角色信息
+            }
+        }
+        return true;
     }
 
     @Override

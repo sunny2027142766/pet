@@ -15,6 +15,7 @@ public class PetRoleBo {
     private String roleCode;
     private String description;
     private Integer status;
+    private String pids;
     /**
      * 创建时间
      */

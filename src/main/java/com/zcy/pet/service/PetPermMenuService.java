@@ -14,4 +14,11 @@ public interface PetPermMenuService extends IService<PetPermMenu> {
      * @return boolean
      */
     boolean savePermMenus(Long pid, List<Long> mids);
+
+    /**
+     * 判断菜单是否分配给权限
+     * @param mid 菜单ID
+     * @return boolean
+     */
+    boolean hasAssignedPerms(Long mid);
 }

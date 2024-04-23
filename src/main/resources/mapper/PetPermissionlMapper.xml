@@ -9,15 +9,18 @@
 
     <select id="getPagePetPermList" resultType="com.zcy.pet.model.bo.PetPermissionBo">
         SELECT
-        pid,
-        perm_name,
-        perm_code,
-        description,
-        status,
-        create_time
-        FROM pet_permission
+        p.pid,
+        p.perm_name,
+        p.perm_code,
+        p.description,
+        p.status,
+        p.create_time,
+        GROUP_CONCAT( m.mid ) AS mids
+        FROM pet_permission p
+        LEFT JOIN  pet_perm_menu ppm ON p.pid = ppm.pid
+        LEFT JOIN  pet_menu m  ON ppm.mid = m.mid
         <where>
-            pet_permission.deleted = 0
+            p.deleted = 0
             <if test="queryParams.permName != null and queryParams.permName != ''">
                 And perm_name like concat('%',#{queryParams.permName},'%')
             </if>
@@ -31,5 +34,6 @@
                 AND create_time &lt;= #{queryParams.endTime}
             </if>
         </where>
+        GROUP BY p.pid
     </select>
 </mapper>

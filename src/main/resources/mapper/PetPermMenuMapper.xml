@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zcy.pet.mapper.PetPermMenuMapper">
+    <!-- 获取菜单绑定的权限数 -->
+    <select id="countMenusForPerm" resultType="java.lang.Integer">
+        SELECT
+            count(*)
+        FROM
+            pet_perm_menu ppm
+                INNER JOIN pet_menu m ON ppm.mid = m.mid AND m.deleted = 0
+                INNER JOIN pet_permission p ON ppm.pid = p.pid AND p.deleted = 0
+        WHERE
+            ppm.mid = #{mid}
+    </select>
+</mapper>

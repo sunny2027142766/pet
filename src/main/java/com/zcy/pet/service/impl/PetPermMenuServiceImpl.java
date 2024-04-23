@@ -18,8 +18,15 @@ import java.util.stream.Collectors;
 public class PetPermMenuServiceImpl extends ServiceImpl<PetPermMenuMapper, PetPermMenu> implements PetPermMenuService {
     @Override
     public boolean savePermMenus(Long pid, List<Long> mids) {
-        if (pid == null || CollectionUtil.isEmpty(mids)) {
+        if (pid == null) {
             return false;
+        }
+
+        if (CollectionUtil.isEmpty(mids)) {
+            // pids 为空数组,证明该角色没有任何菜单,需要删除权限关联的菜单信息
+            this.remove(new LambdaQueryWrapper<PetPermMenu>()
+                    .eq(PetPermMenu::getPid, pid));
+            return true;
         }
 
         // 原权限菜单ID集合
@@ -59,5 +66,11 @@ public class PetPermMenuServiceImpl extends ServiceImpl<PetPermMenuMapper, PetPe
             }
         }
         return true;
+    }
+
+    @Override
+    public boolean hasAssignedPerms(Long mid) {
+        int count = this.baseMapper.countMenusForPerm(mid);
+        return count > 0;
     }
 }

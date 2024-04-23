@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zcy.pet.mapper.PetRolePermissionMapper">
+    <!-- 获取权限绑定的角色数 -->
+    <select id="countRolesForPerm" resultType="java.lang.Integer">
+        SELECT
+            count(*)
+        FROM
+            pet_role_permission prp
+                INNER JOIN pet_permission p ON prp.pid = p.pid AND p.deleted = 0
+                INNER JOIN pet_role r ON prp.rid = r.rid AND r.deleted = 0
+        WHERE
+            prp.pid = #{pid}
+    </select>
+</mapper>

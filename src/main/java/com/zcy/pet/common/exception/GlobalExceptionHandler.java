@@ -19,4 +19,11 @@ public class GlobalExceptionHandler {
         log.error("异常原因：{}", e.getMessage(), e);
         return Result.failed(e.getMessage());
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.OK)
+    public <T> Result<T> handleIllegalArgumentException(Exception e) {
+        log.error("异常原因：{}", e.getMessage(), e);
+        return Result.failed(e.getMessage());
+    }
 }

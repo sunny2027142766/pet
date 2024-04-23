@@ -6,4 +6,5 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface PetRolePermissionMapper extends BaseMapper<PetRolePermission> {
+    int countRolesForPerm(Long pid);
 }

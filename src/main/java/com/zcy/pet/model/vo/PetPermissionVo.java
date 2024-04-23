@@ -13,7 +13,7 @@ public class PetPermissionVo {
     private String permCode;
     private String description;
     private Integer status;
-
+    private String mids; // 菜单ids
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date createTime;
 }

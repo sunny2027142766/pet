@@ -86,6 +86,7 @@ public class PetRoleServiceImpl extends ServiceImpl<PetRoleMapper, PetRole> impl
 
     /**
      * 添加角色
+     *
      * @param roleForm 角色表单对象
      * @return boolean
      */
@@ -115,7 +116,8 @@ public class PetRoleServiceImpl extends ServiceImpl<PetRoleMapper, PetRole> impl
 
     /**
      * 修改角色
-     * @param roleId 角色ID
+     *
+     * @param roleId   角色ID
      * @param roleForm 角色表单对象
      * @return boolean
      */
@@ -152,6 +154,7 @@ public class PetRoleServiceImpl extends ServiceImpl<PetRoleMapper, PetRole> impl
 
     /**
      * 删除角色
+     *
      * @param ids 角色ID，多个使用英文逗号(,)分割
      * @return boolean
      */
@@ -172,13 +175,11 @@ public class PetRoleServiceImpl extends ServiceImpl<PetRoleMapper, PetRole> impl
 
             boolean deleteResult = this.removeById(roleId);
             if (deleteResult) {
-                // zf TODO: 删除成功,删除权限
-//                petRolePermissionService.deleteRolePerms(roleId);
+                // TODO: 删除成功,删除角色关联的用户信息
             }
         }
         return true;
     }
-
 
 
 }
