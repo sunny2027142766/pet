@@ -11,7 +11,7 @@ public enum ResultCode implements IResultCode, Serializable {
     SUCCESS(200, "请求成功"),
     SYSTEM_EXECUTION_ERROR(500, "系统执行出错"),
 
-    TOKEN_INVALID(10010,"token无效"),
+    TOKEN_INVALID(401,"未授权，请重新登录"),
     ACCESS_UNAUTHORIZED(10011, "访问未授权"),
     TOKEN_ACCESS_FORBIDDEN(10012, "token已被禁止访问"),
 

@@ -100,7 +100,7 @@ public class PetUserServiceImpl extends ServiceImpl<PetUserMapper, PetUser> impl
 
         if (result) {
             // 保存用户角色
-            petUserRoleService.saveUserRoles(entity.getUid(), userForm.getRids());
+            petUserRoleService.saveUserRoles(entity.getUid(), userForm.getRoleIds());
         }
         return result;
     }
@@ -131,7 +131,7 @@ public class PetUserServiceImpl extends ServiceImpl<PetUserMapper, PetUser> impl
 
         if (result) {
             // 保存用户角色
-            petUserRoleService.saveUserRoles(entity.getUid(), userForm.getRids());
+            petUserRoleService.saveUserRoles(entity.getUid(), userForm.getRoleIds());
         }
         return result;
     }

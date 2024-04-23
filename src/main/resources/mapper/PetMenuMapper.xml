@@ -13,22 +13,23 @@
         title,
         path,
         icon,
-        is_valid,
-        create_time,
-        update_time
+        status,
+        create_time
         FROM pet_menu
         <where>
-            <trim prefix="WHERE" prefixOverrides="AND">
-                <if test="queryParams.title != null and queryParams.title != ''">
-                    AND title like concat('%',#{queryParams.title},'%')
-                </if>
-                <if test="queryParams.createTime != null and queryParams.createTime != ''">
-                    AND create_time = #{queryParams.createTime}
-                </if>
-                <if test="queryParams.updateTime != null and queryParams.updateTime != ''">
-                    AND update_time = #{queryParams.updateTime}
-                </if>
-            </trim>
+            pet_menu.deleted = 0
+            <if test="queryParams.title != null and queryParams.title != ''">
+                AND title like concat('%',#{queryParams.title},'%')
+            </if>
+            <if test='queryParams.status!=null'>
+                AND status = #{queryParams.status}
+            </if>
+            <if test="queryParams.startTime != null">
+                AND create_time &gt;= #{queryParams.startTime}
+            </if>
+            <if test="queryParams.endTime != null">
+                AND create_time &lt;= #{queryParams.endTime}
+            </if>
         </where>
     </select>
 

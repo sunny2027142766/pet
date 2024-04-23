@@ -10,21 +10,25 @@
     <select id="getPagePetPermList" resultType="com.zcy.pet.model.bo.PetPermissionBo">
         SELECT
         pid,
-        permission_name,
+        perm_name,
+        perm_code,
         description,
-        is_valid,
-        create_time,
-        update_time
+        status,
+        create_time
         FROM pet_permission
         <where>
-            <if test="queryParams.permissionName != null and queryParams.permissionName != ''">
-                permission_name like concat('%',#{queryParams.permissionName},'%')
+            pet_permission.deleted = 0
+            <if test="queryParams.permName != null and queryParams.permName != ''">
+                And perm_name like concat('%',#{queryParams.permName},'%')
             </if>
-            <if test="queryParams.createTime != null and queryParams.createTime != ''">
-                and create_time = #{queryParams.createTime}
+            <if test='queryParams.status!=null'>
+                AND status = #{queryParams.status}
             </if>
-            <if test="queryParams.updateTime != null and queryParams.updateTime != ''">
-                and update_time = #{queryParams.updateTime}
+            <if test="queryParams.startTime != null">
+                AND create_time &gt;= #{queryParams.startTime}
+            </if>
+            <if test="queryParams.endTime != null">
+                AND create_time &lt;= #{queryParams.endTime}
             </if>
         </where>
     </select>

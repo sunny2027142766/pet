@@ -12,15 +12,18 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class PetPermPageQuery extends BasePageQuery {
 
     @Schema(description ="权限名")
-    private String permissionName;
+    private String permName;
 
-    @Schema(description ="创建时间")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private String createTime;
+    @Schema(description ="权限名")
+    private Integer status;
 
-    @Schema(description ="更新时间")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private String updateTime;
+    @Schema(description ="创建时间-开始时间")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private String startTime;
+
+    @Schema(description ="创建时间-结束时间")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private String endTime;
 
 
 }

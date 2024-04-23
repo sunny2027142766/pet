@@ -2,6 +2,7 @@ package com.zcy.pet.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.zcy.pet.common.model.Option;
 import com.zcy.pet.model.entity.PetPermission;
 import com.zcy.pet.model.form.PermForm;
 import com.zcy.pet.model.form.RoleForm;
@@ -43,5 +44,9 @@ public interface PetPermissionService extends IService<PetPermission> {
      */
     boolean deletePerms(String ids);
 
-
+    /**
+     * 获取权限下拉列表
+     * @return List<Option>
+     */
+    List<Option> listPermOptions();
 }

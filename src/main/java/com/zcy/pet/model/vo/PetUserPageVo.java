@@ -19,7 +19,7 @@ public class PetUserPageVo {
     private String avatar;
     private Integer status;
     private String roleNames;
-
+    private String roleIds;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date createTime;
 }

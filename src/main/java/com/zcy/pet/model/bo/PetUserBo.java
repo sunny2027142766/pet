@@ -19,6 +19,7 @@ public class PetUserBo {
     private String avatar;
     private Integer status;
     private String roleNames;
+    private String roleIds;
     /**
      * 创建时间
      */

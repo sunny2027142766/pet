@@ -19,11 +19,11 @@ public class ResponseUtils {
      * @param resultCode
      */
     public static void writeErrMsg(HttpServletResponse response, ResultCode resultCode) throws IOException {
-        switch (resultCode) {
-            case ACCESS_UNAUTHORIZED, TOKEN_INVALID -> response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            case TOKEN_ACCESS_FORBIDDEN -> response.setStatus(HttpStatus.FORBIDDEN.value());
-            default -> response.setStatus(HttpStatus.BAD_REQUEST.value());
-        }
+//        switch (resultCode) {
+//            case ACCESS_UNAUTHORIZED, TOKEN_INVALID -> response.setStatus(HttpStatus.UNAUTHORIZED.value());
+//            case TOKEN_ACCESS_FORBIDDEN -> response.setStatus(HttpStatus.FORBIDDEN.value());
+//            default -> response.setStatus(HttpStatus.BAD_REQUEST.value());
+//        }
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
         response.getWriter().print(JSONUtil.toJsonStr(Result.failed(resultCode)));

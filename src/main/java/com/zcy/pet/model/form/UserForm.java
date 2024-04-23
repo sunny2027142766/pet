@@ -30,5 +30,5 @@ public class UserForm {
     private String avatar;
 
     @Schema(description = "角色")
-    private List<Long> rids;
+    private List<Long> roleIds;
 }

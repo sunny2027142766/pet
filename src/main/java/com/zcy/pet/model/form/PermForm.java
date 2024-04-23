@@ -3,6 +3,8 @@ package com.zcy.pet.model.form;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+import java.util.List;
+
 @Schema(description = "权限表单对象")
 @Data
 public class PermForm {
@@ -18,4 +20,7 @@ public class PermForm {
 
     @Schema(description = "描述")
     private String description;
+
+    @Schema(description = "菜单列表")
+    private List<Long> mids;
 }

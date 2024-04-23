@@ -5,15 +5,16 @@ import lombok.Data;
 
 import java.util.Date;
 
-
+/**
+ * 菜单分页vo视图
+ */
 @Data
-public class PetPermissionVo {
-    private Long pid;
-    private String permName;
-    private String permCode;
-    private String description;
+public class PetMenuPageVo {
+    private Long mid;
+    private String title;
+    private String path;
+    private String icon;
     private Integer status;
-
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date createTime;
 }

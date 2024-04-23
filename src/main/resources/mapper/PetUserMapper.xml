@@ -19,6 +19,7 @@
         u.avatar,
         u.status,
         GROUP_CONCAT( r.role_name ) AS roleNames,
+        GROUP_CONCAT( r.rid ) AS roleIds,
         u.create_time
         FROM
         pet_user u
