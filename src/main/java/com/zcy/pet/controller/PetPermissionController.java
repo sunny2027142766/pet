@@ -88,8 +88,12 @@ public class PetPermissionController {
                 "/authManage/role",
                 "/authManage/perm",
                 "/authManage/menu",
+                "/pet",
+                "/pet/type",
+                "/pet/list",
                 "/proTable",
-                "/proTable/useHooks2"});
+                "/proTable/useHooks2"
+        });
         return Result.success(permList);
     }
 

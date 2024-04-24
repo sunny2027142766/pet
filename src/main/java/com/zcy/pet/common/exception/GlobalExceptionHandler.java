@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 public class GlobalExceptionHandler {
     @ExceptionHandler(AuthException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.OK)
     public <T> Result<T> handleAuthException(AuthException e) {
         log.error("异常原因：{}", e.getMessage(), e);
         return Result.failed(e.getMessage());

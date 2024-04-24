@@ -9,19 +9,11 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class PetInfo extends BaseEntity {
+public class PetType extends BaseEntity {
     @TableId(type = IdType.AUTO)
-    private Long pid;
+    private Long tid;
     private String name;
-    private Integer type;
-    private Integer isVirtual;
-    private String img;
-    private Integer age;
-    private Double weight;
-    private String happy;
-    private String health;
-    private String hungry;
-    private Integer status;
+    private String subName;
     /**
      * 逻辑删除标识(0:未删除;1:已删除)
      */

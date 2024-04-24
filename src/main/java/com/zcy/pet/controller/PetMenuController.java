@@ -42,28 +42,28 @@ public class PetMenuController {
     }
     @Operation(description = "分页查询所有菜单接口")
     @GetMapping("/page")
-    public PageResult<PetMenuPageVo> getAllModelPage(@ParameterObject PetMenuPageQuery petMenuPageQuery) {
+    public PageResult<PetMenuPageVo> getAllMenuPage(@ParameterObject PetMenuPageQuery petMenuPageQuery) {
         //  调用service查询所有结果
         IPage<PetMenuPageVo> petMenuPageList = petMenuService.getPetMenuPageList(petMenuPageQuery);
         return PageResult.success(petMenuPageList);
     }
     @Operation(summary = "新增菜单")
     @PostMapping
-    public Result addPerm(@Valid @RequestBody MenuForm menuForm) {
+    public Result addMenu(@Valid @RequestBody MenuForm menuForm) {
         boolean result = petMenuService.saveMenu(menuForm);
         return Result.judge(result);
     }
 
     @Operation(summary = "修改菜单")
     @PutMapping(value = "/{mid}")
-    public Result updatePerm(@Parameter(description = "用户ID") @PathVariable Long mid, @Valid @RequestBody MenuForm menuForm) {
+    public Result updateMenu(@Parameter(description = "用户ID") @PathVariable Long mid, @Valid @RequestBody MenuForm menuForm) {
         boolean result = petMenuService.updateMenu(mid, menuForm);
         return Result.judge(result);
     }
 
     @Operation(summary = "删除菜单")
     @DeleteMapping("/{ids}")
-    public Result deleteRoles(@Parameter(description = "删除菜单，多个以英文逗号(,)拼接") @PathVariable String ids) {
+    public Result deleteMenus(@Parameter(description = "删除菜单，多个以英文逗号(,)拼接") @PathVariable String ids) {
         boolean result = petMenuService.deleteMenus(ids);
         return Result.judge(result);
     }

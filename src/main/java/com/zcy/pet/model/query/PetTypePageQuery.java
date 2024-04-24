@@ -8,14 +8,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Schema(description ="宠物信息分页查询对象")
-public class PetInfoPageQuery extends BasePageQuery {
+@Schema(description ="宠物类型分页查询对象")
+public class PetTypePageQuery extends BasePageQuery {
 
     @Schema(description ="宠物名称")
     private String name;
-
-    @Schema(description ="模型类型")
-    private Integer isVirtual;
 
     @Schema(description ="宠物信息状态")
     private Integer status;

@@ -9,31 +9,37 @@
 
     <select id="getPagePetInfoList" resultType="com.zcy.pet.model.bo.PetInfoBo">
         SELECT
-        pid,
-        name,
-        type,
-        `virtual`,
-        age,
-        weight,
-        happy,
-        health,
-        hungry,
-        is_valid,
-        create_time,
-        update_time
-        FROM pet_info
+        i.pid,
+        i.name,
+        t.name AS type,
+        i.is_virtual,
+        i.img,
+        i.age,
+        i.weight,
+        i.happy,
+        i.health,
+        i.hungry,
+        i.status,
+        i.create_time
+        FROM pet_info i
+        LEFT JOIN pet_type t ON i.type = t.tid
         <where>
-            <trim prefix="WHERE" prefixOverrides="AND">
-                <if test="queryParams.name != null and queryParams.name != ''">
-                    AND name like concat('%',#{queryParams.name},'%')
-                </if>
-                <if test="queryParams.createTime != null and queryParams.createTime != ''">
-                    AND create_time = #{queryParams.createTime}
-                </if>
-                <if test="queryParams.updateTime != null and queryParams.updateTime != ''">
-                    AND update_time = #{queryParams.updateTime}
-                </if>
-            </trim>
+            i.deleted = 0
+            <if test="queryParams.name != null and queryParams.name != ''">
+                AND i.name like concat('%',#{queryParams.name},'%')
+            </if>
+            <if test="queryParams.isVirtual != null">
+                AND i.is_virtual = #{queryParams.isVirtual}
+            </if>
+            <if test='queryParams.status!=null'>
+                AND i.status = #{queryParams.status}
+            </if>
+            <if test="queryParams.startTime != null">
+                AND i.create_time &gt;= #{queryParams.startTime}
+            </if>
+            <if test="queryParams.endTime != null">
+                AND i.create_time &lt;= #{queryParams.endTime}
+            </if>
         </where>
     </select>
 

@@ -19,6 +19,7 @@ public class WebConfig implements WebMvcConfigurer {
     public static final String[] EXCLUDE_URLS = {
             "/api/auth/**",
             "/api/test/**",
+            "/api/file/**"
     };
     @Value("${file.path}")
     private String path;

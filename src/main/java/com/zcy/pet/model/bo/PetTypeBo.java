@@ -6,20 +6,13 @@ import lombok.Data;
 import java.util.Date;
 
 /**
- *  角色表持久化对象
+ *  类型持久化对象
  */
 @Data
-public class PetInfoBo {
-    private Long pid;
+public class PetTypeBo {
+    private Long tid;
     private String name;
-    private String type;
-    private Integer isVirtual;
-    private String img;
-    private Integer age;
-    private Double weight;
-    private String happy;
-    private String health;
-    private String hungry;
+    private String subName;
     private Integer status;
     /**
      * 创建时间

@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zcy.pet.common.model.Option;
+import com.zcy.pet.common.utils.DateUtils;
 import com.zcy.pet.converter.PetInfoConverter;
 import com.zcy.pet.converter.PetMenuConverter;
 import com.zcy.pet.mapper.PetMenuMapper;
@@ -48,6 +49,8 @@ public class PetMenuServiceImpl extends ServiceImpl<PetMenuMapper, PetMenu> impl
         Integer pageNum = petMenuPageQuery.getPageNum();
         Integer pageSize = petMenuPageQuery.getPageSize();
         Page<PetMenuBo> pageQuery = new Page<>(pageNum, pageSize);
+        // 格式化为数据库日期格式，避免日期比较使用格式化函数导致索引失效
+        DateUtils.toDatabaseFormat(petMenuPageQuery, "startTime", "endTime");
         // 查询数据
         Page<PetMenuBo> petMenuBo = this.baseMapper.getPagePetMenuList(pageQuery, petMenuPageQuery);
         // 数据转换

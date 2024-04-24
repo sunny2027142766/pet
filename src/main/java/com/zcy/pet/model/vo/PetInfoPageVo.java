@@ -1,12 +1,18 @@
 package com.zcy.pet.model.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
+import java.util.Date;
+
+/**
+ * 角色分页vo视图
+ */
 @Data
-public class PetInfoVo {
+public class PetInfoPageVo {
     private Long pid;
     private String name;
-    private Integer type;
+    private String type;
     private Integer isVirtual;
     private String img;
     private Integer age;
@@ -15,4 +21,6 @@ public class PetInfoVo {
     private String health;
     private String hungry;
     private Integer status;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date createTime;
 }

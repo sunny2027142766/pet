@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zcy.pet.mapper.PetTypeMapper">
+
+    <select id="getPagePetTypeList" resultType="com.zcy.pet.model.bo.PetTypeBo">
+        SELECT
+        t.tid,
+        t.name,
+        t.sub_name,
+        t.status,
+        t.create_time
+        FROM pet_type t
+        <where>
+            t.deleted = 0
+            <if test="queryParams.name != null and queryParams.name != ''">
+                AND name like concat('%',#{queryParams.name},'%')
+            </if>
+            <if test='queryParams.status!=null'>
+                AND status = #{queryParams.status}
+            </if>
+            <if test="queryParams.startTime != null">
+                AND create_time &gt;= #{queryParams.startTime}
+            </if>
+            <if test="queryParams.endTime != null">
+                AND create_time &lt;= #{queryParams.endTime}
+            </if>
+        </where>
+    </select>
+
+</mapper>
