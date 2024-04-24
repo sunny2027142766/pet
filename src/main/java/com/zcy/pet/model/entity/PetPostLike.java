@@ -8,14 +8,10 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class PetPost extends BaseEntity {
+public class PetPostLike extends BaseEntity{
     @TableId(type = IdType.AUTO)
-    private Long pid;
+    private Long lid; // 点赞表ID
     private Long uid; // 用户ID
-    private String title;
-    private String description;
-    private String content;
-    private String commentNum;
-    private String likeNum;
-    private String shareNum;
+    private Long pid; // 帖子ID
+    private int status; // 点赞状态
 }

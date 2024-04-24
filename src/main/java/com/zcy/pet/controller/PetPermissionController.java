@@ -94,6 +94,9 @@ public class PetPermissionController {
                 "/pet",
                 "/pet/type",
                 "/pet/list",
+                "/post",
+                "/post/info",
+                "/post/comment",
                 "/proTable",
                 "/proTable/useHooks2"
         });
