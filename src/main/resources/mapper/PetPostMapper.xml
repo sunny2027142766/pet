@@ -13,9 +13,6 @@
         title,
         description,
         content,
-        comment_num,
-        like_num,
-        share_num,
         status,
         create_time
         FROM pet_post
@@ -35,11 +32,5 @@
             </if>
         </where>
     </select>
-
-    <insert id="likePost" parameterType="com.zcy.pet.model.entity.PetPostLike" useGeneratedKeys="true" keyProperty="lid">
-        INSERT INTO pet_like (pid, uid, status)
-        VALUES (#{pid}, #{uid}, #{status})
-            ON DUPLICATE KEY UPDATE status = #{status}
-    </insert>
 
 </mapper>

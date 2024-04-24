@@ -19,6 +19,9 @@ public class PostForm {
     @Schema(description = "帖子描述")
     private String description;
 
+    @Schema(description = "帖子图片")
+    private String img;
+
     @Schema(description = "帖子内容")
     private String content;
 

@@ -13,10 +13,11 @@ public class PetPostBo {
     private Long pid;
     private String title;
     private String description;
-    private Integer content;
-    private String commentNum;
-    private String likeNum;
-    private String shareNum;
+    private String img;
+    private String content;
+    private Integer commentNum;
+    private Integer likeNum;
+    private Integer shareNum;
     private Integer status;
     /**
      * 创建时间
