@@ -3,5 +3,19 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zcy.pet.mapper.PostCommentMapper">
-
+    <!-- 根据帖子ID获取该帖子的所有评论列表 -->
+    <select id="getPostComments" resultType="com.zcy.pet.model.vo.PetCommentVo">
+        SELECT
+            c.cid ,
+            c.content AS content,
+            c.create_time AS createTime,
+            u.avatar,
+            u.username
+        FROM
+            pet_post_comment c
+                JOIN
+            pet_user u ON c.uid = u.uid
+        WHERE
+            c.pid = #{pid}
+    </select>
 </mapper>

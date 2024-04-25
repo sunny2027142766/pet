@@ -9,11 +9,11 @@ import com.zcy.pet.model.form.PostForm;
 import com.zcy.pet.model.form.TypeForm;
 import com.zcy.pet.model.query.PetPermPageQuery;
 import com.zcy.pet.model.query.PetPostPageQuery;
-import com.zcy.pet.model.vo.PetPermissionVo;
-import com.zcy.pet.model.vo.PetPostPageVo;
-import com.zcy.pet.model.vo.PetPostVo;
+import com.zcy.pet.model.query.PetPostQuery;
+import com.zcy.pet.model.vo.*;
 import com.zcy.pet.service.PetPostService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,11 +31,29 @@ import java.util.List;
 public class PetPostController {
     private final PetPostService petPostService;
 
-    @Operation(description = "测试查询所有接口")
+    @Operation(description = "查询所有帖子")
     @GetMapping
-    public Result<List<PetPost>> getAllPosts() {
+    public Result<List<PetPostVo>> getAllPosts(@RequestParam String title) {
         //  调用service查询所有结果
-        List<PetPost> list = petPostService.getAllPetPostList();
+        List<PetPostVo> list = petPostService.getAllPetPostList(title);
+        // 封装结果
+        return Result.success(list);
+    }
+
+    @Operation(description = "查询帖子详细信息")
+    @GetMapping("{pid}")
+    public Result<PetPostDetailVo> getAllPosts(@Parameter(description = "帖子ID") @PathVariable Long pid) {
+        //  调用service查询所有结果
+        PetPostDetailVo list = petPostService.getAllPetPostDetail(pid);
+        // 封装结果
+        return Result.success(list);
+    }
+
+    @Operation(description = "查询帖子评论列表")
+    @GetMapping("{pid}/comment")
+    public Result<List<PetCommentVo>> getPostComments(@Parameter(description = "帖子ID") @PathVariable Long pid) {
+        //  调用service查询所有结果
+        List<PetCommentVo> list = petPostService.getPostComments(pid);
         // 封装结果
         return Result.success(list);
     }
@@ -57,7 +75,7 @@ public class PetPostController {
 
     @Operation(description = "点赞帖子")
     @GetMapping("/like")
-    public Result likePost(@RequestParam("pid") Long pid, @RequestParam("uid") Long uid,@RequestParam("pid") Integer status) {
+    public Result likePost(@RequestParam("pid") Long pid, @RequestParam("uid") Long uid,@RequestParam("status") Integer status) {
         petPostService.likePost(pid, uid,status);
         return Result.success(null);
     }
@@ -75,5 +93,7 @@ public class PetPostController {
         boolean result =  petPostService.commentPost(commentForm);
         return Result.judge(result);
     }
+
+    // TODO: 删除帖子
 }
 

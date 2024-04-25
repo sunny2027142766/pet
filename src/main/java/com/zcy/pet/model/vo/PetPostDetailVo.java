@@ -3,7 +3,7 @@ package com.zcy.pet.model.vo;
 import lombok.Data;
 
 @Data
-public class PetPostVo {
+public class PetPostDetailVo {
     private Long pid;
     private String title;
     private String img;

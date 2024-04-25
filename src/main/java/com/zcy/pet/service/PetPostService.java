@@ -6,12 +6,16 @@ import com.zcy.pet.model.entity.PetPost;
 import com.zcy.pet.model.form.CommentForm;
 import com.zcy.pet.model.form.PostForm;
 import com.zcy.pet.model.query.PetPostPageQuery;
+import com.zcy.pet.model.query.PetPostQuery;
+import com.zcy.pet.model.vo.PetCommentVo;
+import com.zcy.pet.model.vo.PetPostDetailVo;
 import com.zcy.pet.model.vo.PetPostPageVo;
+import com.zcy.pet.model.vo.PetPostVo;
 
 import java.util.List;
 
 public interface PetPostService extends IService<PetPost> {
-    List<PetPost> getAllPetPostList();
+    List<PetPostVo> getAllPetPostList(String title);
 
     /**
      * 分页查询
@@ -26,4 +30,8 @@ public interface PetPostService extends IService<PetPost> {
     void sharePost(Long pid, Long uid);
 
     boolean commentPost(CommentForm commentForm);
+
+    PetPostDetailVo getAllPetPostDetail(Long pid);
+
+    List<PetCommentVo> getPostComments(Long pid);
 }

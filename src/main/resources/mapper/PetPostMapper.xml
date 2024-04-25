@@ -6,7 +6,6 @@
     <select id="getAllPetInfo" resultType="com.zcy.pet.model.entity.PetPost">
         select * from pet_post
     </select>
-
     <select id="getPagePetPostList" resultType="com.zcy.pet.model.bo.PetPostBo">
         SELECT
         pid,
@@ -31,6 +30,63 @@
                 AND create_time &lt;= #{queryParams.endTime}
             </if>
         </where>
+    </select>
+    <!-- 查询所有帖子列表 -->
+    <select id="getAllPostList" resultType="com.zcy.pet.model.vo.PetPostVo">
+        SELECT
+            p.pid,
+            p.title,
+            p.img,
+            p.description,
+            p.content,
+            COUNT(c.cid) AS commentNum,
+            COUNT(l.lid) AS likeNum,
+            COUNT(s.sid) AS shareNum,
+            u.uid,
+            u.username,
+            u.avatar,
+            p.create_time AS createTime
+        FROM pet_post p
+                 LEFT JOIN pet_post_comment c ON p.pid = c.pid
+                 LEFT JOIN pet_post_like l ON p.pid = l.pid
+                 LEFT JOIN pet_post_share s ON p.pid = s.pid
+                 JOIN pet_user u ON p.uid = u.uid
+        <where>
+            p.deleted = 0
+            <if test="title != null and title != ''">
+                AND p.title like concat('%',#{title},'%')
+            </if>
+        </where>
+        GROUP BY p.pid, u.uid
+    </select>
+
+    <!-- 查询帖子详情 -->
+    <select id="getPetPostDetail" resultType="com.zcy.pet.model.vo.PetPostDetailVo">
+        SELECT
+            p.pid,
+            p.title,
+            p.img,
+            p.description,
+            p.content,
+            (
+                SELECT COUNT(*) FROM pet_post_comment c WHERE c.pid = p.pid
+            ) AS commentNum,
+            (
+                SELECT COUNT(*) FROM pet_post_like l WHERE l.pid = p.pid
+            ) AS likeNum,
+            (
+                SELECT COUNT(*) FROM pet_post_share s WHERE s.pid = p.pid
+            ) AS shareNum,
+            p.uid,
+            u.username AS username,
+            u.avatar AS avatar,
+            p.create_time AS createTime
+        FROM
+            pet_post p
+                INNER JOIN
+            pet_user u ON p.uid = u.uid
+        WHERE
+            p.pid = #{pid};
     </select>
 
 </mapper>

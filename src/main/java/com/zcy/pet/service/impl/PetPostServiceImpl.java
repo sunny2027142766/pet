@@ -20,7 +20,11 @@ import com.zcy.pet.model.entity.PetPostShare;
 import com.zcy.pet.model.form.CommentForm;
 import com.zcy.pet.model.form.PostForm;
 import com.zcy.pet.model.query.PetPostPageQuery;
+import com.zcy.pet.model.query.PetPostQuery;
+import com.zcy.pet.model.vo.PetCommentVo;
+import com.zcy.pet.model.vo.PetPostDetailVo;
 import com.zcy.pet.model.vo.PetPostPageVo;
+import com.zcy.pet.model.vo.PetPostVo;
 import com.zcy.pet.service.PetPostService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +50,9 @@ public class PetPostServiceImpl extends ServiceImpl<PetPostMapper, PetPost> impl
     private PostCommentMapper postCommentMapper;
 
     @Override
-    public List<PetPost> getAllPetPostList() {
-        return this.baseMapper.selectList(null);
+    public List<PetPostVo> getAllPetPostList(String title) {
+        // zf TODO: 这里关联查询的点赞数,分享数,和评论数,不正确,需要进行问题排查
+        return this.baseMapper.getAllPostList(title);
     }
 
     @Override
@@ -109,5 +114,17 @@ public class PetPostServiceImpl extends ServiceImpl<PetPostMapper, PetPost> impl
         PetPostComment comment = petPostCommentConverter.form2Entity(commentForm);
         int count = postCommentMapper.insert(comment);
         return count > 0;
+    }
+
+    @Override
+    public PetPostDetailVo getAllPetPostDetail(Long pid) {
+        // 根据帖子id查询帖子详情
+        return this.baseMapper.getPetPostDetail(pid);
+    }
+
+    @Override
+    public List<PetCommentVo> getPostComments(Long pid) {
+        // 根据帖子id查询该帖子的所有评论
+        return postCommentMapper.getPostComments(pid);
     }
 }
