@@ -17,6 +17,6 @@ public class PetRolePageVo {
     private String description;
     private Integer status;
     private String pids;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date createTime;
 }

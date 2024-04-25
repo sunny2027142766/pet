@@ -6,12 +6,14 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zcy.pet.common.utils.DateUtils;
+import com.zcy.pet.converter.PetCommentConverter;
 import com.zcy.pet.converter.PetPostCommentConverter;
 import com.zcy.pet.converter.PetPostConverter;
 import com.zcy.pet.mapper.PetPostMapper;
 import com.zcy.pet.mapper.PostCommentMapper;
 import com.zcy.pet.mapper.PostLikeMapper;
 import com.zcy.pet.mapper.PostShareMapper;
+import com.zcy.pet.model.bo.PetCommentBo;
 import com.zcy.pet.model.bo.PetPostBo;
 import com.zcy.pet.model.entity.PetPost;
 import com.zcy.pet.model.entity.PetPostComment;
@@ -19,12 +21,10 @@ import com.zcy.pet.model.entity.PetPostLike;
 import com.zcy.pet.model.entity.PetPostShare;
 import com.zcy.pet.model.form.CommentForm;
 import com.zcy.pet.model.form.PostForm;
+import com.zcy.pet.model.query.PetCommentPageQuery;
 import com.zcy.pet.model.query.PetPostPageQuery;
 import com.zcy.pet.model.query.PetPostQuery;
-import com.zcy.pet.model.vo.PetCommentVo;
-import com.zcy.pet.model.vo.PetPostDetailVo;
-import com.zcy.pet.model.vo.PetPostPageVo;
-import com.zcy.pet.model.vo.PetPostVo;
+import com.zcy.pet.model.vo.*;
 import com.zcy.pet.service.PetPostService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +39,8 @@ public class PetPostServiceImpl extends ServiceImpl<PetPostMapper, PetPost> impl
     private final PetPostConverter petPostConverter;
 
     private final PetPostCommentConverter petPostCommentConverter;
+
+    private final PetCommentConverter petCommentConverter;
 
     @Autowired
     private PostLikeMapper postLikeMapper;
@@ -127,4 +129,19 @@ public class PetPostServiceImpl extends ServiceImpl<PetPostMapper, PetPost> impl
         // 根据帖子id查询该帖子的所有评论
         return postCommentMapper.getPostComments(pid);
     }
+
+    @Override
+    public IPage<PetCommentPageVo> getAllPostComments(PetCommentPageQuery petCommentPageQuery) {
+        // 构造参数
+        Integer pageNum = petCommentPageQuery.getPageNum();
+        Integer pageSize = petCommentPageQuery.getPageSize();
+        Page<PetCommentBo> pageQuery = new Page<>(pageNum, pageSize);
+        // 格式化为数据库日期格式，避免日期比较使用格式化函数导致索引失效
+        DateUtils.toDatabaseFormat(petCommentPageQuery, "startTime", "endTime");
+        // 查询数据
+        Page<PetCommentBo> petCommentBo = postCommentMapper.getPagePetCommentList(pageQuery, petCommentPageQuery);
+        // 数据转换
+        return petCommentConverter.boToPageVo(petCommentBo);
+    }
+
 }

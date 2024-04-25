@@ -15,6 +15,6 @@ public class PetMenuPageVo {
     private String path;
     private String icon;
     private Integer status;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date createTime;
 }

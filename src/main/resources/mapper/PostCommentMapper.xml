@@ -18,4 +18,31 @@
         WHERE
             c.pid = #{pid}
     </select>
+
+    <select id="getPagePetCommentList" resultType="com.zcy.pet.model.bo.PetCommentBo">
+        SELECT
+            c.cid ,
+            c.content,
+            u.avatar,
+            u.username,
+            c.create_time AS createTime
+        FROM
+            pet_post_comment c
+                JOIN
+            pet_user u ON c.uid = u.uid
+        WHERE
+            c.deleted = 0
+        <if test="queryParams.username != null and queryParams.username != ''">
+            AND u.username like concat('%',#{queryParams.username},'%')
+        </if>
+        <if test="queryParams.content != null and queryParams.content != ''">
+            AND c.content like concat('%',#{queryParams.content},'%')
+        </if>
+        <if test="queryParams.startTime != null">
+            AND create_time &gt;= #{queryParams.startTime}
+        </if>
+        <if test="queryParams.endTime != null">
+            AND create_time &lt;= #{queryParams.endTime}
+        </if>
+    </select>
 </mapper>

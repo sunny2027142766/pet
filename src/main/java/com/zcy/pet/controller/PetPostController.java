@@ -7,6 +7,7 @@ import com.zcy.pet.model.entity.PetPost;
 import com.zcy.pet.model.form.CommentForm;
 import com.zcy.pet.model.form.PostForm;
 import com.zcy.pet.model.form.TypeForm;
+import com.zcy.pet.model.query.PetCommentPageQuery;
 import com.zcy.pet.model.query.PetPermPageQuery;
 import com.zcy.pet.model.query.PetPostPageQuery;
 import com.zcy.pet.model.query.PetPostQuery;
@@ -95,5 +96,12 @@ public class PetPostController {
     }
 
     // TODO: 删除帖子
+
+    @Operation(description = "获取所有评论")
+    @GetMapping("/comments")
+    public PageResult<PetCommentPageVo> getAllPostComments(@ParameterObject PetCommentPageQuery petCommentPageQuery){
+        IPage<PetCommentPageVo> petCommentPageVo = petPostService.getAllPostComments(petCommentPageQuery);
+        return PageResult.success(petCommentPageVo);
+    }
 }
 

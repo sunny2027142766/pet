@@ -11,10 +11,8 @@ public class PetPostPageVo {
     private String title;
     private String description;
     private String content;
-    private Integer commentNum;
-    private Integer likeNum;
-    private Integer shareNum;
+    private String img;
     private Integer status;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date createTime;
 }

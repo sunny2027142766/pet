@@ -6,20 +6,14 @@ import lombok.Data;
 import java.util.Date;
 
 /**
- * 用户信息分页vo视图
+ * 评论分页vo视图
  */
 @Data
-public class PetUserPageVo {
-    private Long uid;
+public class PetCommentPageVo {
+    private Long cid;
     private String username;
-    private String password;
-    private String nickName;
-    private String email;
-    private String phone;
+    private String content;
     private String avatar;
-    private Integer status;
-    private String roleNames;
-    private String roleIds;
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date createTime;
 }

@@ -5,17 +5,12 @@ import lombok.Data;
 
 import java.util.Date;
 
-/**
- *  角色表持久化对象
- */
 @Data
-public class PetPostBo {
-    private Long pid;
-    private String title;
-    private String description;
-    private String img;
+public class PetCommentBo {
+    private Long cid;
     private String content;
-    private Integer status;
+    private String username;
+    private String avatar;
     /**
      * 创建时间
      */

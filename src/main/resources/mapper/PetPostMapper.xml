@@ -13,6 +13,7 @@
         description,
         content,
         status,
+        img,
         create_time
         FROM pet_post
         <where>
@@ -39,18 +40,23 @@
             p.img,
             p.description,
             p.content,
-            COUNT(c.cid) AS commentNum,
-            COUNT(l.lid) AS likeNum,
-            COUNT(s.sid) AS shareNum,
+            (
+            SELECT COUNT(*) FROM pet_post_comment c WHERE c.pid = p.pid
+            ) AS commentNum,
+            (
+            SELECT COUNT(*) FROM pet_post_like l WHERE l.pid = p.pid
+            ) AS likeNum,
+            (
+            SELECT COUNT(*) FROM pet_post_share s WHERE s.pid = p.pid
+            ) AS shareNum,
             u.uid,
             u.username,
             u.avatar,
             p.create_time AS createTime
-        FROM pet_post p
-                 LEFT JOIN pet_post_comment c ON p.pid = c.pid
-                 LEFT JOIN pet_post_like l ON p.pid = l.pid
-                 LEFT JOIN pet_post_share s ON p.pid = s.pid
-                 JOIN pet_user u ON p.uid = u.uid
+        FROM
+            pet_post p
+            INNER JOIN
+            pet_user u ON p.uid = u.uid
         <where>
             p.deleted = 0
             <if test="title != null and title != ''">
