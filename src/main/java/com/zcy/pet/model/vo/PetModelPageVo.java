@@ -1,22 +1,16 @@
-package com.zcy.pet.model.bo;
+package com.zcy.pet.model.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.util.Date;
 
-/**
- *  模型表持久化对象
- */
 @Data
-public class PetModelBo {
+public class PetModelPageVo {
     private Long mid;
     private String name;
     private String url;
-    private String status;
-    /**
-     * 创建时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Integer status;
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date createTime;
 }

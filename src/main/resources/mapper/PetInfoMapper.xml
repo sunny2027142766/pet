@@ -11,6 +11,8 @@
         SELECT
         i.pid,
         i.name,
+        t.tid AS tid,
+        m.mid AS mid,
         t.name AS type,
         i.is_virtual,
         i.img,
@@ -23,6 +25,7 @@
         i.create_time
         FROM pet_info i
         LEFT JOIN pet_type t ON i.type = t.tid
+        LEFT JOIN pet_model m ON i.model = m.mid
         <where>
             i.deleted = 0
             <if test="queryParams.name != null and queryParams.name != ''">

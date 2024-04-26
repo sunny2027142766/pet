@@ -12,6 +12,8 @@ import java.util.Date;
 public class PetInfoBo {
     private Long pid;
     private String name;
+    private Long tid;
+    private Long mid;
     private String type;
     private Integer isVirtual;
     private String img;

@@ -69,6 +69,13 @@ public class PetInfoServiceImpl extends ServiceImpl<PetInfoMapper, PetInfo> impl
 
     @Override
     public boolean updatePetInfo(Long pid, PetInfoForm petInfoForm) {
+        String name = petInfoForm.getName();
+        long count = this.count(new LambdaQueryWrapper<PetInfo>()
+                .ne(pid != null, PetInfo::getPid, pid)
+                .and(
+                        wrapper -> wrapper.eq(PetInfo::getName, name)
+                ));
+        Assert.isTrue(count == 0, "宠物名称已存在，请修改后重试！");
         petInfoForm.setPid(pid);
         // 实体转换
         PetInfo petInfo = petInfoConverter.form2Entity(petInfoForm);

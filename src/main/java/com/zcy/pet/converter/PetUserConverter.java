@@ -1,7 +1,9 @@
 package com.zcy.pet.converter;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.zcy.pet.common.model.Option;
 import com.zcy.pet.model.bo.PetUserBo;
+import com.zcy.pet.model.entity.PetModel;
 import com.zcy.pet.model.entity.PetUser;
 import com.zcy.pet.model.form.UserForm;
 import com.zcy.pet.model.vo.PetUserInfoVo;
@@ -22,4 +24,12 @@ public interface PetUserConverter {
     PetUserInfoVo toUserInfoVo(PetUser entity);
     @InheritInverseConfiguration(name = "entity2Form")
     PetUser form2Entity(UserForm entity);
+
+    List<Option> entities2Options(List<PetUser> userList);
+
+    @Mappings({
+            @Mapping(target = "value", source = "uid"),
+            @Mapping(target = "label", source = "username")
+    })
+    Option<Long> entity2Option(PetUser user);
 }

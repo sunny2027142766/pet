@@ -7,10 +7,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.zcy.pet.common.model.Option;
 import com.zcy.pet.common.utils.DateUtils;
 import com.zcy.pet.converter.PetUserConverter;
 import com.zcy.pet.mapper.PetUserMapper;
 import com.zcy.pet.model.bo.PetUserBo;
+import com.zcy.pet.model.entity.PetModel;
 import com.zcy.pet.model.entity.PetUser;
 import com.zcy.pet.model.form.UserForm;
 import com.zcy.pet.model.query.PetUserPageQuery;
@@ -184,5 +186,16 @@ public class PetUserServiceImpl extends ServiceImpl<PetUserMapper, PetUser> impl
 //            userInfoVO.setPerms(perms);
 //        }
         return userInfoVO;
+    }
+
+    @Override
+    public List<Option> listUserOptions() {
+        // 查询数据
+        List<PetUser> userList = this.list(new LambdaQueryWrapper<PetUser>()
+                .select(PetUser::getUid, PetUser::getUsername)
+        );
+        log.info("模型列表:{}", userList);
+        // 实体转换
+        return petUserConverter.entities2Options(userList);
     }
 }

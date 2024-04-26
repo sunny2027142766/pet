@@ -2,6 +2,7 @@ package com.zcy.pet.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.zcy.pet.common.model.Option;
 import com.zcy.pet.common.result.PageResult;
 import com.zcy.pet.common.result.Result;
 import com.zcy.pet.model.entity.PetRole;
@@ -99,4 +100,12 @@ public class PetUserController {
         boolean result = petUserService.deleteUsers(ids);
         return Result.judge(result);
     }
+
+    @Operation(summary = "用户下拉列表")
+    @GetMapping("/options")
+    public Result<List<Option>> listModelOptions() {
+        List<Option> list = petUserService.listUserOptions();
+        return Result.success(list);
+    }
+
 }

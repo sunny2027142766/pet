@@ -12,7 +12,9 @@ import java.util.Date;
 public class PetInfoPageVo {
     private Long pid;
     private String name;
+    private Long tid;
     private String type;
+    private Long mid;
     private Integer isVirtual;
     private String img;
     private Integer age;

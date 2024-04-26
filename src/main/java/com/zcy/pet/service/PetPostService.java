@@ -34,4 +34,8 @@ public interface PetPostService extends IService<PetPost> {
     List<PetCommentVo> getPostComments(Long pid);
 
     IPage<PetCommentPageVo> getAllPostComments(PetCommentPageQuery petCommentPageQuery);
+
+    boolean deleteComments(String ids);
+
+    boolean deletePosts(String ids);
 }

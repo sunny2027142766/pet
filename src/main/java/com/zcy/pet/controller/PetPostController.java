@@ -95,7 +95,19 @@ public class PetPostController {
         return Result.judge(result);
     }
 
-    // TODO: 删除帖子
+    @Operation(description = "删除帖子")
+    @DeleteMapping("/{ids}")
+    public Result deletePost(@Parameter(description = "删除多个，多个以英文逗号(,)拼接") @PathVariable String ids){
+        boolean result =  petPostService.deletePosts(ids);
+        return Result.judge(result);
+    }
+
+    @Operation(description = "删除评论")
+    @DeleteMapping("/comment/{ids}")
+    public Result deleteComments(@Parameter(description = "删除多个，多个以英文逗号(,)拼接") @PathVariable String ids){
+        boolean result =  petPostService.deleteComments(ids);
+        return Result.judge(result);
+    }
 
     @Operation(description = "获取所有评论")
     @GetMapping("/comments")

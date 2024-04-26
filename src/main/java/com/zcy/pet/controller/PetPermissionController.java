@@ -82,7 +82,6 @@ public class PetPermissionController {
 
         permList.put("permissions", new String[]{
                 "/home/index",
-                "/proTable/useHooks1",
                 "/authManage",
                 "/authManage/user",
                 "/authManage/role",
@@ -90,15 +89,13 @@ public class PetPermissionController {
                 "/authManage/menu",
                 "/interaction",
                 "/interaction/config",
-                "/proTable",
                 "/pet",
                 "/pet/type",
                 "/pet/list",
+                "/pet/model",
                 "/post",
                 "/post/info",
                 "/post/comment",
-                "/proTable",
-                "/proTable/useHooks2"
         });
         return Result.success(permList);
     }

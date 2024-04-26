@@ -13,7 +13,8 @@ public class PetInfo extends BaseEntity {
     @TableId(type = IdType.AUTO)
     private Long pid;
     private String name;
-    private Integer type;
+    private Long type;
+    private Long model;
     private Integer isVirtual;
     private String img;
     private Integer age;

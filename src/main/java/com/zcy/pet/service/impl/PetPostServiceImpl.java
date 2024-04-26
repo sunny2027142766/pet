@@ -1,5 +1,7 @@
 package com.zcy.pet.service.impl;
 
+import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -30,7 +32,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -80,7 +84,7 @@ public class PetPostServiceImpl extends ServiceImpl<PetPostMapper, PetPost> impl
     }
 
     @Override
-    public void likePost(Long pid, Long uid,Integer status) {
+    public void likePost(Long pid, Long uid, Integer status) {
         // 根据帖子ID和用户ID查询当前的点赞记录
         PetPostLike like = postLikeMapper.selectOne(new QueryWrapper<PetPostLike>()
                 .eq("pid", pid)
@@ -144,4 +148,26 @@ public class PetPostServiceImpl extends ServiceImpl<PetPostMapper, PetPost> impl
         return petCommentConverter.boToPageVo(petCommentBo);
     }
 
+    @Override
+    public boolean deleteComments(String idsStr) {
+        Assert.isTrue(StrUtil.isNotBlank(idsStr), "删除的数据为空");
+        // 逻辑删除
+        List<Long> ids = Arrays.stream(idsStr.split(","))
+                .map(Long::parseLong)
+                .collect(Collectors.toList());
+        int count = postCommentMapper.deleteBatchIds(ids);
+        return count > 0;
+    }
+
+    @Override
+    public boolean deletePosts(String idsStr) {
+        Assert.isTrue(StrUtil.isNotBlank(idsStr), "删除的数据为空");
+        // 逻辑删除
+        // TODO: 删除是否需要把关联的评论表，点赞表，分享表中对应的数据清空？
+        List<Long> ids = Arrays.stream(idsStr.split(","))
+                .map(Long::parseLong)
+                .collect(Collectors.toList());
+        int count = this.baseMapper.deleteBatchIds(ids);
+        return count > 0;
+    }
 }

@@ -12,21 +12,35 @@
         mid,
         name,
         url,
-        img,
-        is_valid,
-        create_time,
-        update_time
-        FROM pet_model
+        status,
+        create_time
+        FROM pet_model m
         <where>
+            m.deleted = 0
             <if test="queryParams.name != null and queryParams.name != ''">
-                name like concat('%',#{queryParams.name},'%')
+                And name like concat('%',#{queryParams.name},'%')
             </if>
-            <if test="queryParams.createTime != null and queryParams.createTime != ''">
-                and create_time = #{queryParams.createTime}
+            <if test="queryParams.startTime != null">
+                AND create_time &gt;= #{queryParams.startTime}
             </if>
-            <if test="queryParams.updateTime != null and queryParams.updateTime != ''">
-                and update_time = #{queryParams.updateTime}
+            <if test="queryParams.endTime != null">
+                AND create_time &lt;= #{queryParams.endTime}
             </if>
         </where>
+    </select>
+
+    <select id="listModelConfig" resultType="com.zcy.pet.model.vo.PetModeConfigVo">
+        SELECT
+            p.pid,
+            p.name,
+            m.url,
+            p.img
+        FROM
+            pet_info p
+                LEFT JOIN pet_model m ON p.model = m.mid
+        WHERE
+            p.deleted = 0
+          AND
+            p.is_virtual = 1
     </select>
 </mapper>

@@ -2,6 +2,7 @@ package com.zcy.pet.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.zcy.pet.common.model.Option;
 import com.zcy.pet.common.result.PageResult;
 import com.zcy.pet.model.entity.PetUser;
 import com.zcy.pet.model.form.UserForm;
@@ -51,4 +52,6 @@ public interface PetUserService extends IService<PetUser> {
      * 根据用户ID获取用户登录后的信息
      */
     PetUserInfoVo getUserInfoById(Long uid);
+
+    List<Option> listUserOptions();
 }
