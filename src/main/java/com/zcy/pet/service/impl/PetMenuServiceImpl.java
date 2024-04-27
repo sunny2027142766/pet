@@ -19,6 +19,7 @@ import com.zcy.pet.model.entity.PetRole;
 import com.zcy.pet.model.form.MenuForm;
 import com.zcy.pet.model.query.PetMenuPageQuery;
 import com.zcy.pet.model.vo.PetMenuPageVo;
+import com.zcy.pet.model.vo.PetMenuTreeVo;
 import com.zcy.pet.model.vo.PetMenuVo;
 import com.zcy.pet.service.PetMenuService;
 import com.zcy.pet.service.PetPermMenuService;
@@ -26,8 +27,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -122,5 +122,25 @@ public class PetMenuServiceImpl extends ServiceImpl<PetMenuMapper, PetMenu> impl
         log.info("菜单列表:{}", petMenus);
         // 实体转换
         return petMenuConverter.entities2Options(petMenus);
+    }
+
+    @Override
+    public IPage<PetMenuTreeVo> getPetMenuTreeList(PetMenuPageQuery petMenuPageQuery) {
+        // 1. 获取所有的菜单
+        List<PetMenu> petMenus = this.list();
+        // 2. 创建一个 map，用于存放每个父菜单对应的子菜单列表
+        Map<Long, List<PetMenu>> childrenMap = new HashMap<>();
+        //  3. 遍历菜单列表，将每个菜单的子菜单列表存入 map 中
+        for (PetMenu petMenu : petMenus) {
+            Long parentId = petMenu.getPid();
+            if (parentId == null) {
+                parentId = 0L;
+            }
+            List<PetMenu> children = childrenMap.computeIfAbsent(parentId, k -> new ArrayList<>());
+            children.add(petMenu);
+
+        }
+
+      return null;
     }
 }

@@ -10,6 +10,7 @@ import com.zcy.pet.model.form.PermForm;
 import com.zcy.pet.model.query.PetMenuPageQuery;
 import com.zcy.pet.model.query.PetModelPageQuery;
 import com.zcy.pet.model.vo.PetMenuPageVo;
+import com.zcy.pet.model.vo.PetMenuTreeVo;
 import com.zcy.pet.model.vo.PetMenuVo;
 import com.zcy.pet.model.vo.PetModelVo;
 import com.zcy.pet.service.PetMenuService;
@@ -47,6 +48,16 @@ public class PetMenuController {
         IPage<PetMenuPageVo> petMenuPageList = petMenuService.getPetMenuPageList(petMenuPageQuery);
         return PageResult.success(petMenuPageList);
     }
+
+
+    @Operation(description = "获取所有菜单树型结构接口")
+    @GetMapping("/tree")
+    public PageResult<PetMenuTreeVo> getAllMenuTree(@ParameterObject PetMenuPageQuery petMenuPageQuery) {
+        //  调用service查询所有结果
+        IPage<PetMenuTreeVo> petMenuTreeList = petMenuService.getPetMenuTreeList(petMenuPageQuery);
+        return PageResult.success(petMenuTreeList);
+    }
+
     @Operation(summary = "新增菜单")
     @PostMapping
     public Result addMenu(@Valid @RequestBody MenuForm menuForm) {

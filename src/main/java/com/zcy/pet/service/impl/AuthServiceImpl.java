@@ -5,8 +5,10 @@ import cn.hutool.core.lang.UUID;
 import com.zcy.pet.common.result.Result;
 import com.zcy.pet.common.result.ResultCode;
 import com.zcy.pet.common.utils.ResponseUtils;
+import com.zcy.pet.mapper.PetUserRoleMapper;
 import com.zcy.pet.model.dto.LoginResult;
 import com.zcy.pet.model.entity.PetUser;
+import com.zcy.pet.model.entity.PetUserRole;
 import com.zcy.pet.model.form.UserRegisterForm;
 import com.zcy.pet.model.vo.UserToken;
 import com.zcy.pet.model.vo.UserTokenInfo;
@@ -16,6 +18,7 @@ import com.zcy.pet.utils.JwtTokenUtil;
 import com.zcy.pet.utils.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -32,6 +35,9 @@ public class AuthServiceImpl implements AuthService {
     private final RedisUtil redisUtil;
 
     private final PetUserService petUserService;
+
+    @Autowired
+    private PetUserRoleMapper petUserRoleMapper;
 
     @Value("${jwt.expire.accessToken}")
     public Integer accessTokenExpire;
@@ -90,10 +96,13 @@ public class AuthServiceImpl implements AuthService {
         petUser.setUsername(username);
         petUser.setEmail(email);
         petUser.setPassword(password);
-        //设置用户状态
-        petUser.setDeleted(0);
-        petUser.setStatus(1);
         boolean saved = petUserService.save(petUser);
+        // 给用户默认绑定一个普通用户角色
+        PetUserRole petUserRole = new PetUserRole();
+        petUserRole.setId(null);
+        petUserRole.setUid(petUser.getUid());
+        petUserRole.setRid(2L);
+        petUserRoleMapper.insert(petUserRole);
         if (saved) {
             return "注册成功";
         } else {

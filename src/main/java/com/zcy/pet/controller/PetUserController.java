@@ -43,6 +43,19 @@ public class PetUserController {
     private final PetRoleService petRoleService;
     private final PetUserRoleService petUserRoleService;
 
+    @Operation(description = "验证用户身份信息")
+    @GetMapping("/identity/{type}")
+    public Result<HashMap<String, Object>> getUserIdentity(@Parameter(description = "用户ID") @PathVariable Integer type,HttpServletRequest request) {
+        //  根据token获取用户ID
+        String header = request.getHeader(jwtTokenUtil.header);
+        String token = header.replace("Bearer", "");
+        UserTokenInfo userInfoToken = jwtTokenUtil.getUserInfoToken(token);
+        Long uid = userInfoToken.getUid();
+        //  根据用户ID验证用户身份
+        HashMap<String, Object> resultData = petUserService.verifyUserIdentity(uid,type);
+        return Result.success(resultData);
+    }
+
     @Operation(description = "分页查询所有用户接口")
     @GetMapping("/page")
     public PageResult<PetUserPageVo> getAllUsersPage(@ParameterObject PetUserPageQuery petUserPageQuery) {

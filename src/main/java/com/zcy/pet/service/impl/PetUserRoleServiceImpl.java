@@ -3,12 +3,17 @@ package com.zcy.pet.service.impl;
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.zcy.pet.mapper.PetRoleMapper;
 import com.zcy.pet.mapper.PetUserRoleMapper;
+import com.zcy.pet.model.entity.PetRole;
+import com.zcy.pet.model.entity.PetUser;
 import com.zcy.pet.model.entity.PetUserRole;
 import com.zcy.pet.service.PetUserRoleService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,6 +21,8 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class PetUserRoleServiceImpl extends ServiceImpl<PetUserRoleMapper, PetUserRole> implements PetUserRoleService {
 
+    @Autowired
+    private PetRoleMapper petRoleMapper;
 
     @Override
     public boolean saveUserRoles(Long uid, List<Long> rids) {
@@ -76,4 +83,23 @@ public class PetUserRoleServiceImpl extends ServiceImpl<PetUserRoleMapper, PetUs
         List<String> roleList = list.stream().map(PetUserRole::getRid).map(String::valueOf).collect(Collectors.toList());
         return roleList;
     }
+
+    @Override
+    public List<String> getUserRoleCodesByUserId(Long uid) {
+        LambdaQueryWrapper<PetUserRole> query = new LambdaQueryWrapper<>();
+        query.eq(PetUserRole::getUid, uid);
+        List<PetUserRole> userRoles  = this.list(query);
+
+        List<String> roleCodes = new ArrayList<>();
+        for (PetUserRole userRole : userRoles) {
+            // 根据角色ID查询角色信息
+            PetRole role = petRoleMapper.selectById(userRole.getRid());
+            if (role != null) {
+                roleCodes.add(role.getRoleCode());
+            }
+        }
+
+        return roleCodes;
+    }
+
 }

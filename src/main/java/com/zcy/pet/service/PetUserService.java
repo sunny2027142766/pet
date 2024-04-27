@@ -13,6 +13,7 @@ import com.zcy.pet.model.vo.PetUserInfoVo;
 import com.zcy.pet.model.vo.PetUserPageVo;
 import com.zcy.pet.model.vo.PetUserVo;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface PetUserService extends IService<PetUser> {
@@ -54,4 +55,6 @@ public interface PetUserService extends IService<PetUser> {
     PetUserInfoVo getUserInfoById(Long uid);
 
     List<Option> listUserOptions();
+
+    HashMap<String, Object> verifyUserIdentity(Long uid,int type);
 }

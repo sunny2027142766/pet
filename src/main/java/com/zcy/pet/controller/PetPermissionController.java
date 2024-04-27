@@ -89,6 +89,7 @@ public class PetPermissionController {
                 "/authManage/menu",
                 "/interaction",
                 "/interaction/config",
+                "/interaction/icon",
                 "/pet",
                 "/pet/type",
                 "/pet/list",

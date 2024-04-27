@@ -1,5 +1,6 @@
 package com.zcy.pet.model.vo;
 
+import com.zcy.pet.model.entity.PetMenu;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -32,6 +33,9 @@ public class PetUserInfoVo {
 
     @Schema(description = "用户权限标识集合")
     private List<String> perms;
+
+    @Schema(description = "用户菜单列表")
+    private List<PetMenu> menus;
 
     @Schema(description = "用户权限和标识集合（1对多）")
     private HashMap<String, List<String>> roleMapPerms;

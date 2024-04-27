@@ -23,4 +23,11 @@ public interface PetUserRoleService extends IService<PetUserRole> {
     boolean hasAssignedUsers(Long roleId);
 
     List<String> getUserRoleListByUserId(Long uid);
+
+    /**
+     * 根据用户ID获取角色Code列表
+     * @param userId 用户ID
+     * @return ["ADMIN", "USER"]
+     */
+    List<String> getUserRoleCodesByUserId(Long userId);
 }

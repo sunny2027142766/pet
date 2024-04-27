@@ -9,6 +9,7 @@ import com.zcy.pet.model.query.PetInfoPageQuery;
 import com.zcy.pet.model.query.PetMenuPageQuery;
 import com.zcy.pet.model.vo.PetInfoVo;
 import com.zcy.pet.model.vo.PetMenuPageVo;
+import com.zcy.pet.model.vo.PetMenuTreeVo;
 import com.zcy.pet.model.vo.PetMenuVo;
 
 import java.util.List;
@@ -25,4 +26,6 @@ public interface PetMenuService extends IService<PetMenu> {
     boolean deleteMenus(String idStr);
 
     List<Option> listMenuOptions();
+
+    IPage<PetMenuTreeVo> getPetMenuTreeList(PetMenuPageQuery petMenuPageQuery);
 }

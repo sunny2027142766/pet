@@ -5,15 +5,15 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zcy.pet.common.model.Option;
 import com.zcy.pet.common.utils.DateUtils;
 import com.zcy.pet.converter.PetUserConverter;
-import com.zcy.pet.mapper.PetUserMapper;
+import com.zcy.pet.mapper.*;
 import com.zcy.pet.model.bo.PetUserBo;
-import com.zcy.pet.model.entity.PetModel;
-import com.zcy.pet.model.entity.PetUser;
+import com.zcy.pet.model.entity.*;
 import com.zcy.pet.model.form.UserForm;
 import com.zcy.pet.model.query.PetUserPageQuery;
 import com.zcy.pet.model.vo.PetUserInfoVo;
@@ -23,9 +23,12 @@ import com.zcy.pet.service.PetUserRoleService;
 import com.zcy.pet.service.PetUserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,8 +41,28 @@ public class PetUserServiceImpl extends ServiceImpl<PetUserMapper, PetUser> impl
 
     private final PetUserRoleService petUserRoleService;
 
+    @Autowired
+    private PetUserRoleMapper petUserRoleMapper;
+
+    @Autowired
+    private PetRoleMapper petRoleMapper;
+
+    @Autowired
+    private PetRolePermissionMapper petRolePermissionMapper;
+
+    @Autowired
+    private PetPermissionMapper petPermissionMapper;
+
+    @Autowired
+    private PetPermMenuMapper permMenuMapper;
+
+    @Autowired
+    private PetMenuMapper petMenuMapper;
+
+
     /**
      * 用户管理分页查询
+     *
      * @param petUserPageQuery 分页查询参数
      * @return IPage<PetUserPageVo>
      */
@@ -59,6 +82,7 @@ public class PetUserServiceImpl extends ServiceImpl<PetUserMapper, PetUser> impl
 
     /**
      * 获取所有用户信息
+     *
      * @return List<PetUserVo>
      */
     @Override
@@ -69,6 +93,7 @@ public class PetUserServiceImpl extends ServiceImpl<PetUserMapper, PetUser> impl
 
     /**
      * 根据邮箱获取用户信息
+     *
      * @param email 邮箱
      * @return PetUser
      */
@@ -81,6 +106,7 @@ public class PetUserServiceImpl extends ServiceImpl<PetUserMapper, PetUser> impl
 
     /**
      * 新增用户
+     *
      * @param userForm 用户表单对象
      * @return boolean
      */
@@ -109,7 +135,8 @@ public class PetUserServiceImpl extends ServiceImpl<PetUserMapper, PetUser> impl
 
     /**
      * 修改用户
-     * @param userId 用户ID
+     *
+     * @param userId   用户ID
      * @param userForm 用户表单对象
      * @return boolean
      */
@@ -118,10 +145,7 @@ public class PetUserServiceImpl extends ServiceImpl<PetUserMapper, PetUser> impl
         String email = userForm.getEmail();
         userForm.setUid(userId);
         log.info("执行修改用户信息 userId: {}, userForm: {}", userId, userForm);
-        long count = this.count(new LambdaQueryWrapper<PetUser>()
-                .eq(PetUser::getEmail, email)
-                .ne(PetUser::getUid, userId)
-        );
+        long count = this.count(new LambdaQueryWrapper<PetUser>().eq(PetUser::getEmail, email).ne(PetUser::getUid, userId));
 
         Assert.isTrue(count == 0, "该邮箱已存在");
 
@@ -140,6 +164,7 @@ public class PetUserServiceImpl extends ServiceImpl<PetUserMapper, PetUser> impl
 
     /**
      * 删除用户
+     *
      * @param idsStr 用户ID，多个以英文逗号(,)分割
      * @return boolean
      */
@@ -148,54 +173,106 @@ public class PetUserServiceImpl extends ServiceImpl<PetUserMapper, PetUser> impl
         Assert.isTrue(StrUtil.isNotBlank(idsStr), "删除的用户数据为空");
         // zf TODO: 删除时关联的角色信息删除
         // 逻辑删除
-        List<Long> ids = Arrays.stream(idsStr.split(","))
-                .map(Long::parseLong)
-                .collect(Collectors.toList());
+        List<Long> ids = Arrays.stream(idsStr.split(",")).map(Long::parseLong).collect(Collectors.toList());
         return this.removeByIds(ids);
     }
 
     /**
      * 根据用户ID获取用户登录信息
+     *
      * @param userId 用户ID
      * @return PetUserInfoVo
      */
     @Override
     public PetUserInfoVo getUserInfoById(Long userId) {
         // TODO: 根据ID获取登录用户基础信息
-        PetUser user = this.getOne(new LambdaQueryWrapper<PetUser>()
-                .eq(PetUser::getUid, userId)
-                .select(
-                        PetUser::getUid,
-                        PetUser::getUsername,
-                        PetUser::getEmail,
-                        PetUser::getAvatar,
-                        PetUser::getPhone,
-                        PetUser::getNickName
-                )
-        );
+        PetUser user = this.getOne(new LambdaQueryWrapper<PetUser>().eq(PetUser::getUid, userId).select(PetUser::getUid, PetUser::getUsername, PetUser::getEmail, PetUser::getAvatar, PetUser::getPhone, PetUser::getNickName));
         // entity->VO
         PetUserInfoVo userInfoVO = petUserConverter.toUserInfoVo(user);
 
-        //  TODO: 获取用户角色集合 对应查询出来数据库中 role_code 数组
-//        Set<String> roles = ["ADMIN","USER"];
-//        userInfoVO.setRoles(roles);
+        // 查询用户关联的角色信息
+        LambdaQueryWrapper<PetUserRole> userRoleWrapper = Wrappers.lambdaQuery();
+        userRoleWrapper.eq(PetUserRole::getUid, userId);
+        List<PetUserRole> userRoles = petUserRoleMapper.selectList(userRoleWrapper);
+        // 获取用户角色code数组
+        List<String> roleCodes = new ArrayList<>();
+        for (PetUserRole userRole : userRoles) {
+            // 根据角色ID查询角色信息
+            PetRole role = petRoleMapper.selectById(userRole.getRid());
+            if (role != null) {
+                roleCodes.add(role.getRoleCode());
+            }
+        }
 
-        // TODO: 获取用户权限集合 对应查询出来数据库中 perm_code 数组
-//        if (CollectionUtil.isNotEmpty(roles)) {
-//            Set<String> perms = ["ADMIN:ALL","USER:ALL"]
-//            userInfoVO.setPerms(perms);
-//        }
+        // 查询角色关联的权限信息
+        List<Long> roleIds = userRoles.stream().map(PetUserRole::getRid).collect(Collectors.toList());
+        LambdaQueryWrapper<PetRolePermission> rolePermWrapper = Wrappers.lambdaQuery();
+        rolePermWrapper.in(PetRolePermission::getRid, roleIds);
+        List<PetRolePermission> rolePerms = petRolePermissionMapper.selectList(rolePermWrapper);
+        // 获取用户权限code数组
+        List<String> permCodes = new ArrayList<>();
+        for (PetRolePermission rolePerm : rolePerms) {
+            // 根据角色ID查询权限信息
+            PetPermission perm = petPermissionMapper.selectById(rolePerm.getPid());
+            if (perm != null) {
+                permCodes.add(perm.getPermCode());
+            }
+        }
+
+        // 查询权限关联的菜单信息
+        List<Long> permIds = rolePerms.stream()
+                .map(PetRolePermission::getPid)
+                .collect(Collectors.toList());
+        LambdaQueryWrapper<PetPermMenu> permMenuWrapper = Wrappers.lambdaQuery();
+        permMenuWrapper.in(PetPermMenu::getPid, permIds);
+        List<PetPermMenu> permMenus = permMenuMapper.selectList(permMenuWrapper);
+        // 获取用户菜单list
+        List<PetMenu> menuList = new ArrayList<>();
+        for (PetPermMenu permMenu : permMenus) {
+            // 根据角色ID查询权限信息
+            PetMenu menu = petMenuMapper.selectById(permMenu.getMid());
+            if (menu != null) {
+                menuList.add(menu);
+            }
+        }
+
+        // 给VO对象添加查询的内容
+        userInfoVO.setRoles(roleCodes);
+        userInfoVO.setPerms(permCodes);
+        userInfoVO.setMenus(menuList);
+
+        //  TODO: 获取用户角色集合 对应查询出来数据库中 role_code 数组
+//        List<String> roles1 = petUserRoleService.getUserRoleCodesByUserId(userId);
+//        userInfoVO.setRoles(roles1);
+
         return userInfoVO;
     }
 
     @Override
     public List<Option> listUserOptions() {
         // 查询数据
-        List<PetUser> userList = this.list(new LambdaQueryWrapper<PetUser>()
-                .select(PetUser::getUid, PetUser::getUsername)
-        );
+        List<PetUser> userList = this.list(new LambdaQueryWrapper<PetUser>().select(PetUser::getUid, PetUser::getUsername));
         log.info("模型列表:{}", userList);
         // 实体转换
         return petUserConverter.entities2Options(userList);
+    }
+
+    /**
+     * 验证用户身份信息
+     *
+     * @param uid 用户ID
+     * @return HashMap<String, Object>
+     */
+    @Override
+    public HashMap<String, Object> verifyUserIdentity(Long uid, int type) {
+        // TODO: 暂时pass,似乎要在前端进行判断
+        // 1. 先查询用户是否在数据库中
+        long count = this.count(new LambdaQueryWrapper<PetUser>().eq(PetUser::getUid, uid));
+        Assert.isTrue(count == 0, "该用户不存在已存在");
+        // 2.根据type判断用户的登录类型
+        if (type == 1) { // 前台登录
+            // 2.1 验证用户是否具有
+        }
+        return null;
     }
 }
