@@ -1,14 +1,15 @@
 package com.zcy.pet.model.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
+import cn.hutool.json.JSONObject;
+import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.zcy.pet.common.base.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
+@TableName(value = "pet_user",autoResultMap = true)
 public class PetUser extends BaseEntity {
     @TableId(type = IdType.AUTO)
     private Long uid;
@@ -24,6 +25,9 @@ public class PetUser extends BaseEntity {
     private String phone;
 
     private String avatar;
+
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    private JSONObject config;
 
     private Integer status;
     /**

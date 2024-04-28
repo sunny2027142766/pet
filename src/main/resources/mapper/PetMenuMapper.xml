@@ -9,15 +9,21 @@
 
     <select id="getPagePetMenuList" resultType="com.zcy.pet.model.bo.PetMenuBo">
         SELECT
-        mid,
-        title,
-        path,
-        icon,
-        status,
-        create_time
-        FROM pet_menu
+        m.mid,
+        m.pid,
+        m.icon,
+        m.title,
+        m.path,
+        i.path AS iconPath,
+        m.is_front,
+        m.sort,
+        m.level,
+        m.status,
+        m.create_time
+        FROM pet_menu m
+        LEFT JOIN pet_icon i ON m.icon = i.id
         <where>
-            pet_menu.deleted = 0
+            m.deleted = 0
             <if test="queryParams.title != null and queryParams.title != ''">
                 AND title like concat('%',#{queryParams.title},'%')
             </if>

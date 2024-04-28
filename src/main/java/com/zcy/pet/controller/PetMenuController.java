@@ -9,10 +9,7 @@ import com.zcy.pet.model.form.MenuForm;
 import com.zcy.pet.model.form.PermForm;
 import com.zcy.pet.model.query.PetMenuPageQuery;
 import com.zcy.pet.model.query.PetModelPageQuery;
-import com.zcy.pet.model.vo.PetMenuPageVo;
-import com.zcy.pet.model.vo.PetMenuTreeVo;
-import com.zcy.pet.model.vo.PetMenuVo;
-import com.zcy.pet.model.vo.PetModelVo;
+import com.zcy.pet.model.vo.*;
 import com.zcy.pet.service.PetMenuService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -47,6 +44,16 @@ public class PetMenuController {
         //  调用service查询所有结果
         IPage<PetMenuPageVo> petMenuPageList = petMenuService.getPetMenuPageList(petMenuPageQuery);
         return PageResult.success(petMenuPageList);
+    }
+
+
+    @Operation(description = "获取所有后台父菜单接口")
+    @GetMapping("/parent")
+    public Result<List<ParentMenuVo>> getAllParentMenus(){
+        //  调用service查询所有结果
+        List<ParentMenuVo> list = petMenuService.getAllParentPetMenuList();
+        // 封装结果
+        return Result.success(list);
     }
 
 

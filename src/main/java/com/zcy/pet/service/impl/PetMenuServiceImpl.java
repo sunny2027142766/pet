@@ -8,19 +8,15 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zcy.pet.common.model.Option;
 import com.zcy.pet.common.utils.DateUtils;
-import com.zcy.pet.converter.PetInfoConverter;
 import com.zcy.pet.converter.PetMenuConverter;
 import com.zcy.pet.mapper.PetMenuMapper;
-import com.zcy.pet.model.bo.PetInfoBo;
 import com.zcy.pet.model.bo.PetMenuBo;
 import com.zcy.pet.model.entity.PetMenu;
-import com.zcy.pet.model.entity.PetPermission;
-import com.zcy.pet.model.entity.PetRole;
 import com.zcy.pet.model.form.MenuForm;
 import com.zcy.pet.model.query.PetMenuPageQuery;
+import com.zcy.pet.model.vo.ParentMenuVo;
 import com.zcy.pet.model.vo.PetMenuPageVo;
 import com.zcy.pet.model.vo.PetMenuTreeVo;
-import com.zcy.pet.model.vo.PetMenuVo;
 import com.zcy.pet.service.PetMenuService;
 import com.zcy.pet.service.PetPermMenuService;
 import lombok.AllArgsConstructor;
@@ -28,7 +24,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -60,29 +55,24 @@ public class PetMenuServiceImpl extends ServiceImpl<PetMenuMapper, PetMenu> impl
     @Override
     public boolean saveMenu(MenuForm menuForm) {
         Long mId = menuForm.getMid();
-        String path = menuForm.getPath();
-        long count = this.count(new LambdaQueryWrapper<PetMenu>()
-                .ne(mId != null, PetMenu::getMid, mId)
-                .and(
-                        wrapper -> wrapper.eq(PetMenu::getPath, path)
-                ));
-        Assert.isTrue(count == 0, "菜单路径已存在，请修改后重试！");
+        String title = menuForm.getTitle();
+        long count = this.count(new LambdaQueryWrapper<PetMenu>().eq(PetMenu::getTitle, title));
+        Assert.isTrue(count == 0, "菜单标题已存在，请修改后重试！");
         // 实体转换
         PetMenu menu = petMenuConverter.form2Entity(menuForm);
-
         return this.save(menu);
     }
 
     @Override
     public boolean updateMenu(Long mid, MenuForm menuForm) {
         Long mId = menuForm.getMid();
-        String path = menuForm.getPath();
+        String title = menuForm.getTitle();
         long count = this.count(new LambdaQueryWrapper<PetMenu>()
                 .ne(mId != null, PetMenu::getMid, mId)
                 .and(
-                        wrapper -> wrapper.eq(PetMenu::getPath, path)
+                        wrapper -> wrapper.eq(PetMenu::getTitle, title)
                 ));
-        Assert.isTrue(count == 0, "菜单路径已存在，请修改后重试！");
+        Assert.isTrue(count == 0, "菜单标题已存在，请修改后重试！");
         menuForm.setMid(mid);
         // 实体转换
         PetMenu menu = petMenuConverter.form2Entity(menuForm);
@@ -138,9 +128,24 @@ public class PetMenuServiceImpl extends ServiceImpl<PetMenuMapper, PetMenu> impl
             }
             List<PetMenu> children = childrenMap.computeIfAbsent(parentId, k -> new ArrayList<>());
             children.add(petMenu);
-
         }
+        return null;
+    }
 
-      return null;
+    @Override
+    public List<ParentMenuVo> getAllParentPetMenuList() {
+        // 获取所有父菜单
+        List<PetMenu> petMenus = this.list(new LambdaQueryWrapper<PetMenu>()
+                .eq(PetMenu::getLevel, 1L)
+                .ne(PetMenu::getIsFront, 1)
+        );
+        ArrayList<ParentMenuVo> list = new ArrayList<ParentMenuVo>();
+        for (PetMenu menu: petMenus) {
+            ParentMenuVo parentMenuVo = new ParentMenuVo();
+            parentMenuVo.setTitle(menu.getTitle());
+            parentMenuVo.setMid(menu.getMid());
+            list.add(parentMenuVo);
+        }
+        return list;
     }
 }

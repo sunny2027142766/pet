@@ -7,10 +7,7 @@ import com.zcy.pet.model.entity.PetMenu;
 import com.zcy.pet.model.form.MenuForm;
 import com.zcy.pet.model.query.PetInfoPageQuery;
 import com.zcy.pet.model.query.PetMenuPageQuery;
-import com.zcy.pet.model.vo.PetInfoVo;
-import com.zcy.pet.model.vo.PetMenuPageVo;
-import com.zcy.pet.model.vo.PetMenuTreeVo;
-import com.zcy.pet.model.vo.PetMenuVo;
+import com.zcy.pet.model.vo.*;
 
 import java.util.List;
 
@@ -28,4 +25,6 @@ public interface PetMenuService extends IService<PetMenu> {
     List<Option> listMenuOptions();
 
     IPage<PetMenuTreeVo> getPetMenuTreeList(PetMenuPageQuery petMenuPageQuery);
+
+    List<ParentMenuVo> getAllParentPetMenuList();
 }

@@ -2,6 +2,7 @@ package com.zcy.pet.service.impl;
 
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -16,6 +17,7 @@ import com.zcy.pet.model.bo.PetUserBo;
 import com.zcy.pet.model.entity.*;
 import com.zcy.pet.model.form.UserForm;
 import com.zcy.pet.model.query.PetUserPageQuery;
+import com.zcy.pet.model.vo.PetMenuVo;
 import com.zcy.pet.model.vo.PetUserInfoVo;
 import com.zcy.pet.model.vo.PetUserPageVo;
 import com.zcy.pet.model.vo.PetUserVo;
@@ -58,6 +60,9 @@ public class PetUserServiceImpl extends ServiceImpl<PetUserMapper, PetUser> impl
 
     @Autowired
     private PetMenuMapper petMenuMapper;
+
+    @Autowired
+    private PetIconMapper petIconMapper;
 
 
     /**
@@ -186,7 +191,17 @@ public class PetUserServiceImpl extends ServiceImpl<PetUserMapper, PetUser> impl
     @Override
     public PetUserInfoVo getUserInfoById(Long userId) {
         // TODO: 根据ID获取登录用户基础信息
-        PetUser user = this.getOne(new LambdaQueryWrapper<PetUser>().eq(PetUser::getUid, userId).select(PetUser::getUid, PetUser::getUsername, PetUser::getEmail, PetUser::getAvatar, PetUser::getPhone, PetUser::getNickName));
+        PetUser user = this.getOne(new LambdaQueryWrapper<PetUser>()
+                .eq(PetUser::getUid, userId)
+                .select(
+                        PetUser::getUid,
+                        PetUser::getUsername,
+                        PetUser::getEmail,
+                        PetUser::getAvatar,
+                        PetUser::getPhone,
+                        PetUser::getNickName,
+                        PetUser::getConfig
+                ));
         // entity->VO
         PetUserInfoVo userInfoVO = petUserConverter.toUserInfoVo(user);
 
@@ -227,12 +242,22 @@ public class PetUserServiceImpl extends ServiceImpl<PetUserMapper, PetUser> impl
         permMenuWrapper.in(PetPermMenu::getPid, permIds);
         List<PetPermMenu> permMenus = permMenuMapper.selectList(permMenuWrapper);
         // 获取用户菜单list
-        List<PetMenu> menuList = new ArrayList<>();
+        List<PetMenuVo> menuList = new ArrayList<>();
         for (PetPermMenu permMenu : permMenus) {
             // 根据角色ID查询权限信息
             PetMenu menu = petMenuMapper.selectById(permMenu.getMid());
+            PetIcon petIcon = petIconMapper.selectById(menu.getIcon());
+            PetMenuVo menuVo = new PetMenuVo();
+            menuVo.setMid(menu.getMid());
+            menuVo.setPid(permMenu.getPid());
+            menuVo.setTitle(menu.getTitle());
+            menuVo.setIcon(petIcon.getPath());
+            menuVo.setPath(menu.getPath());
+            menuVo.setLevel(menu.getLevel());
+            menuVo.setSort(menu.getSort());
+            menuVo.setIsFront(menu.getIsFront());
             if (menu != null) {
-                menuList.add(menu);
+                menuList.add(menuVo);
             }
         }
 
@@ -275,4 +300,13 @@ public class PetUserServiceImpl extends ServiceImpl<PetUserMapper, PetUser> impl
         }
         return null;
     }
+
+    @Override
+    public boolean updateUserConfig(Long uid, JSONObject config) {
+        // 更新用户的config字段
+        PetUser petUser = new PetUser();
+        petUser.setConfig(config);
+        return this.update(petUser, new LambdaQueryWrapper<PetUser>().eq(PetUser::getUid, uid));
+    }
+
 }

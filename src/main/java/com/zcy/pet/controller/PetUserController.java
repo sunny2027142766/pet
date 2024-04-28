@@ -1,5 +1,6 @@
 package com.zcy.pet.controller;
 
+import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.zcy.pet.common.model.Option;
@@ -121,4 +122,11 @@ public class PetUserController {
         return Result.success(list);
     }
 
+    @Operation(summary = "更新用户配置信息")
+    @PutMapping("/config/{uid}")
+    public Result<PetUserVo> updateUserConfig(@Parameter(description = "用户ID") @PathVariable Long uid, @RequestBody @Validated JSONObject config) {
+        // zf TODO: 这里查询的时候为什么config字段为null,SQL日志看的查询出来的有 <<BLOB>>
+        boolean result  =  petUserService.updateUserConfig(uid,config);
+        return Result.judge(result);
+    }
 }

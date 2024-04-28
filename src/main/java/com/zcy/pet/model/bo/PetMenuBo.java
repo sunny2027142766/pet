@@ -10,10 +10,15 @@ import java.util.Date;
  */
 @Data
 public class PetMenuBo {
-    private Long mid;
-    private String title;
-    private String path;
-    private String icon;
+    private Long mid; // 菜单ID
+    private Long pid; // 父菜单ID
+    private Integer icon; // 图标ID
+    private String title; // 菜单名称
+    private String path; // 菜单路径
+    private String iconPath; // 菜单图标路径
+    private Integer isFront; // 是否前台菜单
+    private Integer sort; // 排序
+    private Integer level; // 菜单层级
     private Integer status;
     /**
      * 创建时间

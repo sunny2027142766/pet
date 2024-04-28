@@ -1,5 +1,8 @@
 package com.zcy.pet.model.vo;
 
+import cn.hutool.json.JSONObject;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.zcy.pet.model.entity.PetMenu;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -35,7 +38,11 @@ public class PetUserInfoVo {
     private List<String> perms;
 
     @Schema(description = "用户菜单列表")
-    private List<PetMenu> menus;
+    private List<PetMenuVo> menus;
+
+    @Schema(description = "用户配置信息")
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    private JSONObject config;
 
     @Schema(description = "用户权限和标识集合（1对多）")
     private HashMap<String, List<String>> roleMapPerms;

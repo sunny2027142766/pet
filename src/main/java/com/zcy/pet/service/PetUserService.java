@@ -1,5 +1,6 @@
 package com.zcy.pet.service;
 
+import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.zcy.pet.common.model.Option;
@@ -57,4 +58,6 @@ public interface PetUserService extends IService<PetUser> {
     List<Option> listUserOptions();
 
     HashMap<String, Object> verifyUserIdentity(Long uid,int type);
+
+    boolean updateUserConfig(Long uid, JSONObject config);
 }
