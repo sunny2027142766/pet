@@ -60,4 +60,6 @@ public interface PetUserService extends IService<PetUser> {
     HashMap<String, Object> verifyUserIdentity(Long uid,int type);
 
     boolean updateUserConfig(Long uid, JSONObject config);
+
+    JSONObject getUserConfig(Long uid);
 }

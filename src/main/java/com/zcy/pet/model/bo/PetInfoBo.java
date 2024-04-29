@@ -19,9 +19,9 @@ public class PetInfoBo {
     private String img;
     private Integer age;
     private Double weight;
-    private String happy;
-    private String health;
-    private String hungry;
+    private Integer happy;
+    private Integer health;
+    private Integer hungry;
     private Integer status;
     /**
      * 创建时间

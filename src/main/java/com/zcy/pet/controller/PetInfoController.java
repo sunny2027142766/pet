@@ -5,9 +5,11 @@ import com.zcy.pet.common.result.PageResult;
 import com.zcy.pet.common.result.Result;
 import com.zcy.pet.model.entity.PetInfo;
 import com.zcy.pet.model.form.MenuForm;
+import com.zcy.pet.model.form.PetHealthForm;
 import com.zcy.pet.model.form.PetInfoForm;
 import com.zcy.pet.model.query.PetInfoPageQuery;
 import com.zcy.pet.model.query.PetPostPageQuery;
+import com.zcy.pet.model.vo.PetHealthInfoVo;
 import com.zcy.pet.model.vo.PetInfoPageVo;
 import com.zcy.pet.model.vo.PetInfoVo;
 import com.zcy.pet.model.vo.PetPostVo;
@@ -21,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Tag(name = "宠物档案", description = "宠物档案相关接口")
@@ -68,5 +71,19 @@ public class PetInfoController {
         boolean result = petInfoService.deletePetInfo(ids);
         return Result.judge(result);
     }
+
+    @Operation(summary = "获取宠物健康信息")
+    @GetMapping("/health/{pid}")
+    public Result<PetHealthInfoVo> getPetHealthInfo(@Parameter(description = "宠物ID") @PathVariable Long pid) {
+        PetHealthInfoVo petHealthInfoVo = petInfoService.getPetHealthInfo(pid);
+        return Result.success(petHealthInfoVo);
+    }
+    @Operation(summary = "更新宠物健康信息")
+    @PutMapping("/health/{pid}")
+    public Result<Boolean> updatePetHealthInfo(@Parameter(description = "宠物ID") @PathVariable Long pid, @Valid @RequestBody PetHealthForm petHealthForm) {
+        Boolean success = petInfoService.updatePetHealthInfo(pid,petHealthForm);
+        return Result.success();
+    }
+
 
 }

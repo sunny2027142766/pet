@@ -129,4 +129,15 @@ public class PetUserController {
         boolean result  =  petUserService.updateUserConfig(uid,config);
         return Result.judge(result);
     }
+    @Operation(summary = "获取用户配置信息")
+    @GetMapping("/config")
+    public Result<JSONObject> getUserConfig(HttpServletRequest request) {
+        String header = request.getHeader(jwtTokenUtil.header);
+        // 截取token
+        String token = header.replace("Bearer", "");
+        UserTokenInfo userInfoToken = jwtTokenUtil.getUserInfoToken(token);
+        Long uid = userInfoToken.getUid();
+        JSONObject result  =  petUserService.getUserConfig(uid);
+        return Result.success(result);
+    }
 }

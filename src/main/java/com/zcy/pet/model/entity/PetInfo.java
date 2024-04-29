@@ -19,9 +19,9 @@ public class PetInfo extends BaseEntity {
     private String img;
     private Integer age;
     private Double weight;
-    private String happy;
-    private String health;
-    private String hungry;
+    private Integer happy;
+    private Integer health;
+    private Integer hungry;
     private Integer status;
     /**
      * 逻辑删除标识(0:未删除;1:已删除)

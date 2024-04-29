@@ -14,8 +14,10 @@ import com.zcy.pet.model.bo.PetInfoBo;
 import com.zcy.pet.model.bo.PetPostBo;
 import com.zcy.pet.model.entity.PetInfo;
 import com.zcy.pet.model.entity.PetMenu;
+import com.zcy.pet.model.form.PetHealthForm;
 import com.zcy.pet.model.form.PetInfoForm;
 import com.zcy.pet.model.query.PetInfoPageQuery;
+import com.zcy.pet.model.vo.PetHealthInfoVo;
 import com.zcy.pet.model.vo.PetInfoPageVo;
 import com.zcy.pet.model.vo.PetInfoVo;
 import com.zcy.pet.service.PetInfoService;
@@ -94,4 +96,41 @@ public class PetInfoServiceImpl extends ServiceImpl<PetInfoMapper, PetInfo> impl
         // 删除字典数据项
         return this.removeByIds(ids);
     }
+
+    @Override
+    public PetHealthInfoVo getPetHealthInfo(Long pid) {
+        PetHealthInfoVo petHealthInfoVo = new PetHealthInfoVo();
+        // 查询宠物信息
+        PetInfo petInfo = this.getById(pid);
+        if (petInfo == null) {
+            return null;
+        }
+        petHealthInfoVo.setPid(petInfo.getPid());
+        petHealthInfoVo.setHealth(petInfo.getHealth());
+        petHealthInfoVo.setHungry(petInfo.getHungry());
+        petHealthInfoVo.setHappy(petInfo.getHappy());
+        return petHealthInfoVo;
+    }
+
+    @Override
+    public Boolean updatePetHealthInfo(Long pid, PetHealthForm petHealthForm) {
+        PetInfo petInfo = this.getById(pid);
+        Assert.isTrue(petInfo != null, "宠物不存在");
+        // 检查 petHealthForm 是否为 null
+        if (petHealthForm != null) {
+            if (petHealthForm.getHealth() != null) {
+                petInfo.setHealth(petHealthForm.getHealth());
+            }
+            if (petHealthForm.getHungry() != null) {
+                petInfo.setHungry(petHealthForm.getHungry());
+            }
+            if (petHealthForm.getHappy() != null) {
+                petInfo.setHappy(petHealthForm.getHappy());
+            }
+            // 执行更新操作
+            return this.updateById(petInfo);
+        }
+        return false;
+    }
+
 }

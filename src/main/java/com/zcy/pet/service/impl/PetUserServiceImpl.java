@@ -309,4 +309,14 @@ public class PetUserServiceImpl extends ServiceImpl<PetUserMapper, PetUser> impl
         return this.update(petUser, new LambdaQueryWrapper<PetUser>().eq(PetUser::getUid, uid));
     }
 
+    @Override
+    public JSONObject getUserConfig(Long uid) {
+        PetUser petUser = this.getOne(new LambdaQueryWrapper<PetUser>().eq(PetUser::getUid, uid)
+                .select(PetUser::getConfig));
+        if (petUser == null) {
+            return null;
+        }
+        return petUser.getConfig();
+    }
+
 }
