@@ -9,10 +9,7 @@ import com.zcy.pet.model.entity.PetUser;
 import com.zcy.pet.model.form.UserForm;
 import com.zcy.pet.model.query.PetTestPageQuery;
 import com.zcy.pet.model.query.PetUserPageQuery;
-import com.zcy.pet.model.vo.PetTestPageVo;
-import com.zcy.pet.model.vo.PetUserInfoVo;
-import com.zcy.pet.model.vo.PetUserPageVo;
-import com.zcy.pet.model.vo.PetUserVo;
+import com.zcy.pet.model.vo.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -62,4 +59,6 @@ public interface PetUserService extends IService<PetUser> {
     boolean updateUserConfig(Long uid, JSONObject config);
 
     JSONObject getUserConfig(Long uid);
+
+    PetUserProfileVo getUserProfile(Long uid);
 }

@@ -140,4 +140,16 @@ public class PetUserController {
         JSONObject result  =  petUserService.getUserConfig(uid);
         return Result.success(result);
     }
+
+    @Operation(summary = "获取用户个人信息")
+    @GetMapping("/profile")
+    public Result<PetUserProfileVo> getUserProfile(HttpServletRequest request) {
+        String header = request.getHeader(jwtTokenUtil.header);
+        // 截取token
+        String token = header.replace("Bearer", "");
+        UserTokenInfo userInfoToken = jwtTokenUtil.getUserInfoToken(token);
+        Long uid = userInfoToken.getUid();
+        PetUserProfileVo result  =  petUserService.getUserProfile(uid);
+        return Result.success(result);
+    }
 }

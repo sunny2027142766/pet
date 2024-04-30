@@ -18,13 +18,22 @@ public class UserForm {
     private String password;
 
     @Schema(description = "昵称")
-    private String nickName;
+    private String nickname;
 
     @Schema(description = "邮箱")
     private String email;
 
     @Schema(description = "电话")
     private String phone;
+
+    @Schema(description = "地址")
+    private String address;
+
+    @Schema(description = "性别")
+    private Integer sex;
+
+    @Schema(description = "生日")
+    private String birthday;
 
     @Schema(description = "头像")
     private String avatar;

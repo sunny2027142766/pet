@@ -17,10 +17,7 @@ import com.zcy.pet.model.bo.PetUserBo;
 import com.zcy.pet.model.entity.*;
 import com.zcy.pet.model.form.UserForm;
 import com.zcy.pet.model.query.PetUserPageQuery;
-import com.zcy.pet.model.vo.PetMenuVo;
-import com.zcy.pet.model.vo.PetUserInfoVo;
-import com.zcy.pet.model.vo.PetUserPageVo;
-import com.zcy.pet.model.vo.PetUserVo;
+import com.zcy.pet.model.vo.*;
 import com.zcy.pet.service.PetUserRoleService;
 import com.zcy.pet.service.PetUserService;
 import lombok.AllArgsConstructor;
@@ -63,6 +60,18 @@ public class PetUserServiceImpl extends ServiceImpl<PetUserMapper, PetUser> impl
 
     @Autowired
     private PetIconMapper petIconMapper;
+
+    @Autowired
+    private PetPostMapper petPostMapper; // 查询发帖数
+
+    @Autowired
+    private PostCommentMapper postCommentMapper; // 查询评论数
+
+    @Autowired
+    private PostLikeMapper postLikeMapper; // 查询点赞数
+
+    @Autowired
+    private PostShareMapper postShareMapper; // 查询分享数
 
 
     /**
@@ -199,7 +208,7 @@ public class PetUserServiceImpl extends ServiceImpl<PetUserMapper, PetUser> impl
                         PetUser::getEmail,
                         PetUser::getAvatar,
                         PetUser::getPhone,
-                        PetUser::getNickName,
+                        PetUser::getNickname,
                         PetUser::getConfig
                 ));
         // entity->VO
@@ -317,6 +326,36 @@ public class PetUserServiceImpl extends ServiceImpl<PetUserMapper, PetUser> impl
             return null;
         }
         return petUser.getConfig();
+    }
+
+    @Override
+    public PetUserProfileVo getUserProfile(Long uid) {
+        // 查询用户基本信息
+        PetUser petUser = this.getOne(new LambdaQueryWrapper<PetUser>().eq(PetUser::getUid, uid));
+        // 查询用户发帖数
+        Long postNum = petPostMapper.selectCount(new LambdaQueryWrapper<PetPost>().eq(PetPost::getUid, uid));
+        // 查询用户点赞数
+        Long likeNum = postLikeMapper.selectCount(new LambdaQueryWrapper<PetPostLike>().eq(PetPostLike::getUid, uid));
+        // 查询用户分享数
+        Long shareNum = postShareMapper.selectCount(new LambdaQueryWrapper<PetPostShare>().eq(PetPostShare::getUid, uid));
+        // 查询用户评论数
+        Long commentNum = postCommentMapper.selectCount(new LambdaQueryWrapper<PetPostComment>().eq(PetPostComment::getUid, uid));
+        // 构造结果
+        PetUserProfileVo userProfileVo = new PetUserProfileVo();
+        userProfileVo.setUid(petUser.getUid());
+        userProfileVo.setUsername(petUser.getUsername());
+        userProfileVo.setNickname(petUser.getNickname());
+        userProfileVo.setEmail(petUser.getEmail());
+        userProfileVo.setPhone(petUser.getPhone());
+        userProfileVo.setBirthday(petUser.getBirthday());
+        userProfileVo.setAvatar(petUser.getAvatar());
+        userProfileVo.setAddress(petUser.getAddress());
+        userProfileVo.setSex(petUser.getSex());
+        userProfileVo.setPostNum(postNum);
+        userProfileVo.setLikeNum(likeNum);
+        userProfileVo.setShareNum(shareNum);
+        userProfileVo.setCommentNum(commentNum);
+        return userProfileVo;
     }
 
 }

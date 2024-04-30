@@ -18,7 +18,7 @@ public class PetUser extends BaseEntity {
 
     private String password;
 
-    private String nickName;
+    private String nickname;
 
     private String email;
 
@@ -28,6 +28,12 @@ public class PetUser extends BaseEntity {
 
     @TableField(typeHandler = JacksonTypeHandler.class)
     private JSONObject config;
+
+    private String address;
+
+    private Integer sex;
+
+    private String birthday;
 
     private Integer status;
     /**

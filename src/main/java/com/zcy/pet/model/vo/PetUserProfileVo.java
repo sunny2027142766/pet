@@ -3,11 +3,10 @@ package com.zcy.pet.model.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
-public class PetUserVo {
+public class PetUserProfileVo {
     /**
      * 用户ID
      */
@@ -19,7 +18,7 @@ public class PetUserVo {
     /**
      * 昵称
      */
-    private String nickName;
+    private String nickname;
     /**
      * 邮箱
      */
@@ -44,6 +43,26 @@ public class PetUserVo {
      * 生日
      */
     private String birthday;
+
+    /**
+     * 发帖数
+     */
+    private Long postNum;
+
+    /**
+     * 点赞数
+     */
+    private Long likeNum;
+
+    /**
+     * 评论数
+     */
+    private Long commentNum;
+
+    /**
+     * 分享数
+     */
+    private Long shareNum;
     /**
      * 创建时间
      */

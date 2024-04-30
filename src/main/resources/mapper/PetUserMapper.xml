@@ -13,7 +13,7 @@
         u.uid,
         u.password,
         u.username,
-        u.nick_name,
+        u.nickname,
         u.email,
         u.phone,
         u.avatar,

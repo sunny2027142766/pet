@@ -82,7 +82,7 @@ public class PetInfoController {
     @PutMapping("/health/{pid}")
     public Result<Boolean> updatePetHealthInfo(@Parameter(description = "宠物ID") @PathVariable Long pid, @Valid @RequestBody PetHealthForm petHealthForm) {
         Boolean success = petInfoService.updatePetHealthInfo(pid,petHealthForm);
-        return Result.success();
+        return Result.success(success);
     }
 
 
