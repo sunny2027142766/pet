@@ -30,7 +30,7 @@
             <if test='queryParams.keywords!=null and queryParams.keywords.trim() neq ""'>
                 AND (
                 u.username LIKE CONCAT('%',#{queryParams.keywords},'%')
-                OR u.nick_name LIKE CONCAT('%',#{queryParams.keywords},'%')
+                OR u.nickname LIKE CONCAT('%',#{queryParams.keywords},'%')
                 OR u.phone LIKE CONCAT('%',#{queryParams.keywords},'%')
                 )
             </if>

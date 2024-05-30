@@ -17,6 +17,8 @@
             pet_user u ON c.uid = u.uid
         WHERE
             c.pid = #{pid}
+        AND
+            c.deleted = 0
     </select>
 
     <select id="getPagePetCommentList" resultType="com.zcy.pet.model.bo.PetCommentBo">
